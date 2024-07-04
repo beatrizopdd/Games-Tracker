@@ -7,8 +7,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastro'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Colors.blueAccent,
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -60,12 +59,12 @@ class RegisterPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: Color(0x00000000),
                 ),
                 onPressed: () {
                   // Implementar a lógica de cadastro
                 },
-                child: const Text('Cadastrar'),
+                child: const Text('Cadastrar', style: TextStyle(color: Colors.black26)),
               ),
             ],
           ),
