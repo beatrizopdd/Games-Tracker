@@ -4,7 +4,6 @@ import 'login.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
-
   @override
   State<Home> createState() => _HomeState();
 }
@@ -33,6 +32,7 @@ class _HomeState extends State<Home> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Título do menu
                   const Text(
                     'Games Tracker',
                     style: TextStyle(
@@ -41,7 +41,11 @@ class _HomeState extends State<Home> {
                       color: Colors.deepPurple,
                     ),
                   ),
+
+                  // Espaço
                   const SizedBox(height: 20),
+
+                  // Botão de login
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -55,11 +59,16 @@ class _HomeState extends State<Home> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
+                          builder: (context) => const LoginPage(),
+                        ),
                       );
                     },
                   ),
+
+                  // Espaço
                   const SizedBox(height: 10),
+
+                  // Botão de cadastro
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
@@ -73,11 +82,16 @@ class _HomeState extends State<Home> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const RegisterPage()),
+                          builder: (context) => const RegisterPage(),
+                        ),
                       );
                     },
                   ),
+
+                  // Espaço
                   const SizedBox(height: 20),
+
+                  // Botão de acesso como visitante
                   TextButton(
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 30),

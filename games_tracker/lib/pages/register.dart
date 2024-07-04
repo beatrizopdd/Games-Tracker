@@ -6,9 +6,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-      ),
+      appBar: AppBar(backgroundColor: Colors.blueAccent),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -22,6 +20,7 @@ class RegisterPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Campo do nome
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Nome',
@@ -31,7 +30,11 @@ class RegisterPage extends StatelessWidget {
                   prefixIcon: const Icon(Icons.person),
                 ),
               ),
+
+              // Espaço
               const SizedBox(height: 10),
+
+              // Campo do email
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -41,7 +44,11 @@ class RegisterPage extends StatelessWidget {
                   prefixIcon: const Icon(Icons.email),
                 ),
               ),
+
+              // Espaço
               const SizedBox(height: 10),
+
+              // Campo da senha
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Senha',
@@ -52,7 +59,11 @@ class RegisterPage extends StatelessWidget {
                 ),
                 obscureText: true,
               ),
+
+              // Espaço
               const SizedBox(height: 20),
+
+              // Botão de envio
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
@@ -64,7 +75,8 @@ class RegisterPage extends StatelessWidget {
                 onPressed: () {
                   // Implementar a lógica de cadastro
                 },
-                child: const Text('Cadastrar', style: TextStyle(color: Colors.black26)),
+                child: const Text('Cadastrar',
+                    style: TextStyle(color: Colors.black26)),
               ),
             ],
           ),

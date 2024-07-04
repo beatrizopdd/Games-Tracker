@@ -6,9 +6,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-      ),
+      appBar: AppBar(backgroundColor: Colors.blueAccent),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -22,6 +20,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Campo do email
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -31,7 +30,11 @@ class LoginPage extends StatelessWidget {
                   prefixIcon: const Icon(Icons.email),
                 ),
               ),
+
+              // Espaço
               const SizedBox(height: 10),
+
+              // Campo da senha
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Senha',
@@ -42,7 +45,11 @@ class LoginPage extends StatelessWidget {
                 ),
                 obscureText: true,
               ),
+
+              // Espaço
               const SizedBox(height: 20),
+
+              // Botão de envio
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
@@ -54,7 +61,10 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   // Implementar a lógica de login
                 },
-                child: const Text('Entrar', style: TextStyle(color: Colors.black26),),
+                child: const Text(
+                  'Entrar',
+                  style: TextStyle(color: Colors.black26),
+                ),
               ),
             ],
           ),
