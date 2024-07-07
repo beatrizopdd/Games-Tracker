@@ -1,11 +1,11 @@
-class Task {
+class Game {
   int? id;
   String? title;
   int? done;
 
-  Task(this.title, this.done);
+  Game(this.title, this.done);
 
-  Task.fromMap(Map map) {
+  Game.fromMap(Map map) {
     this.id = map["id"];
     this.title = map["title"];
     this.done = map["done"];

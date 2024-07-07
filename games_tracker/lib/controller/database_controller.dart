@@ -6,7 +6,7 @@ import 'dart:io' as io;
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import '../model/task.dart';
+import '../model/database.dart';
 
 class DatabaseController {
   static final String tableName = "task";
@@ -126,45 +126,4 @@ class DatabaseController {
     return db;
   }
 
-  Future<int> insertTask(Task task) async {
-    var database = await db;
-
-    int id = await database!.insert(tableName, task.toMap());
-
-    return id;
-  }
-
-  getTasks() async {
-    var database = await db;
-    String sql = "SELECT * FROM $tableName";
-
-    List tasks = await database!.rawQuery(sql);
-
-    return tasks;
-  }
-
-  Future<int> updateTask(Task task) async {
-    var database = await db;
-
-    int result = await database!.update(
-      tableName,
-      task.toMap(),
-      where: "id = ?",
-      whereArgs: [task.id!]
-    );
-
-    return result;
-  }
-
-  Future<int> deleteTask(int id) async {
-    var database = await db;
-
-    int result = await database!.delete(
-      tableName,
-      where: "id = ?",
-      whereArgs: [id]
-    );
-
-    return result;
-  }
 }
