@@ -16,7 +16,9 @@ class DatabaseController {
 
   DatabaseController._internal();
 
+
   static Future<Database?> get db async {
+
     _db ??= await _initDb();
     return _db;
   }
