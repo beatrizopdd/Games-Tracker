@@ -8,16 +8,16 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../model/task.dart';
 
-class TaskController {
+class DatabaseController {
   static final String tableName = "task";
-  static final TaskController _taskController = TaskController._internal();
+  static final DatabaseController _DatabaseController = DatabaseController._internal();
   static Database? _db;
 
-  factory TaskController() {
-    return _taskController;
+  factory DatabaseController() {
+    return _DatabaseController;
   }
 
-  TaskController._internal();
+  DatabaseController._internal();
 
   Future<Database?> get db async {
     /*if (_db == null) {
@@ -123,7 +123,7 @@ class TaskController {
       )
     );
 
-    return db;  
+    return db;
   }
 
   Future<int> insertTask(Task task) async {
