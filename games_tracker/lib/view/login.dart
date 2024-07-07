@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:games_tracker/controller/database_controller.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -59,8 +60,12 @@ class LoginPage extends StatelessWidget {
                   ),
                   backgroundColor: Color(0x00000000),
                 ),
-                onPressed: () {
-                  
+                onPressed: () async {
+                  Database? database = await DatabaseController.db;
+                  final List<Map<String, dynamic>> result = await database!.query('game');
+                    for (var row in result) {
+                    print(row);
+                  }
                 },
                 child: const Text(
                   'Entrar',

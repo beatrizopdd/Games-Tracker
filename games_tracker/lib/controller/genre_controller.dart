@@ -7,10 +7,10 @@ import 'database_controller.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import '../model/game.dart';
+import '../model/genre.dart';
 
 class GameController {
-  static final String tableName = "game";
+  static final String tableName = "review";
   static Database? db;
 
 
@@ -26,10 +26,10 @@ class GameController {
     return db;
   }
 
-  Future<int> insertgame(Game game) async {
+  Future<int> insertgame(Genre genre) async {
     var database = db;
 
-    int id = await database!.insert(tableName, game.toMap());
+    int id = await database!.insert(tableName, genre.toMap());
 
     return id;
   }
@@ -43,11 +43,11 @@ class GameController {
     return games;
   }
 
-  Future<int> updategame(Game game) async {
+  Future<int> updategame(Genre genre) async {
     var database = db;
 
-    int result = await database!.update(tableName, game.toMap(),
-        where: "id = ?", whereArgs: [game.id!]);
+    int result = await database!.update(tableName, genre.toMap(),
+        where: "id = ?", whereArgs: [genre.id!]);
 
     return result;
   }

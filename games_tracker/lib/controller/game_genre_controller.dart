@@ -1,4 +1,4 @@
-import 'package:sqflite_common/sqflite.dart';
+/*import 'package:sqflite_common/sqflite.dart';
 import 'package:sqflite_common/sqlite_api.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -7,12 +7,11 @@ import 'database_controller.dart';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import '../model/game.dart';
+import '../model/game_genre.dart';
 
 class GameController {
-  static final String tableName = "game";
+  static final String tableName = "game_genre";
   static Database? db;
-
 
   Future<Database?> get _db async {
     /*if (_db == null) {
@@ -26,10 +25,10 @@ class GameController {
     return db;
   }
 
-  Future<int> insertgame(Game game) async {
+  Future<int> insertgame(Game_Genre game_genre) async {
     var database = db;
 
-    int id = await database!.insert(tableName, game.toMap());
+    int id = await database!.insert(tableName, game_genre.toMap());
 
     return id;
   }
@@ -43,14 +42,14 @@ class GameController {
     return games;
   }
 
-  Future<int> updategame(Game game) async {
-    var database = db;
+  // Future<int> updategame(Game_Genre game_genre) async {
+  //var database = db;
 
-    int result = await database!.update(tableName, game.toMap(),
-        where: "id = ?", whereArgs: [game.id!]);
+  //int result = await database!.update(tableName, game_genre.toMap(),
+  //where: "id = ?", whereArgs: [game_genre.id!]);
 
-    return result;
-  }
+  //return result;
+  // }
 
   Future<int> deletegame(int id) async {
     var database = db;
@@ -60,4 +59,4 @@ class GameController {
 
     return result;
   }
-}
+}*/
