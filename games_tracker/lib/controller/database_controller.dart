@@ -6,10 +6,7 @@ import 'dart:io' as io;
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import '../model/database.dart';
-
 class DatabaseController {
-  static final String tableName = "task";
   static final DatabaseController _DatabaseController = DatabaseController._internal();
   static Database? _db;
 
@@ -29,7 +26,7 @@ class DatabaseController {
 
     var databaseFactory = databaseFactoryFfi;
     final io.Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-    String path = p.join(appDocumentsDir.path, "databases", "task.db");
+    String path = p.join(appDocumentsDir.path, "databases", "database.db");
     print("Database Path: $path");
 
     Database? db = await databaseFactory.openDatabase(
