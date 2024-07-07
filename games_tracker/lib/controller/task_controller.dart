@@ -1,66 +1,63 @@
-import "package:sqflite/sqflite.dart";
-import "package:path/path.dart";
+import 'package:sqflite_common/sqflite.dart';
+import 'package:sqflite_common/sqlite_api.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+import 'dart:io' as io;
 
-class DatabaseService {
-  Database? _database;
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-  Future<Database?> get database async {
-    if (_database != null) {
-      return _database;
+import '../model/task.dart';
+
+class TaskController {
+  static final String tableName = "task";
+  static final TaskController _taskController = TaskController._internal();
+  static Database? _db;
+
+  factory TaskController() {
+    return _taskController;
+  }
+
+  TaskController._internal();
+
+  Future<Database?> get db async {
+    /*if (_db == null) {
+      _db = initDb();
     }
-    _database = await _inicialize();
-    return _database;
+    If é substituído pelo comando "??="
+    */
+
+    _db ??= await _initDb();
+
+    return _db;
   }
 
-  Future<String> get fullPath async {
-    const name = 'banco.db';
-    final path = await getDatabasesPath();
-    return join(path, name);
-  }
+  Future<Database?> _initDb() async {
+    sqfliteFfiInit();
 
-  Future<Database> _inicialize() async {
-    final path = await fullPath;
-    var database = await openDatabase(
+    var databaseFactory = databaseFactoryFfi;
+    final io.Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+    String path = p.join(appDocumentsDir.path, "databases", "task.db");
+    print("Database Path: $path");
+
+    Database? db = await databaseFactory.openDatabase(
       path,
-      version: 1,
-      onCreate: createDatabase,
-      singleInstance: true,
-    );
-    return database;
-  }
-  
-  Future<void> printAllTables() async {
-  final db = await database;
-  if (db != null) {
-    List<Map<String, dynamic>> tables = await db.rawQuery(
-      "SELECT name FROM sqlite_master WHERE type='table';"
-    );
-    tables.forEach((table) {
-      print('Table: ${table['name']}');
-    });
-  } else {
-    print('Database is not initialized.');
-  }
-}
-  
-  Future<void> createDatabase(Database database, int version) async {
-  await database.execute("""
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (db, version) async {
+          String sql = """
     CREATE TABLE user(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name VARCHAR NOT NULL,
       email VARCHAR NOT NULL,
       password VARCHAR NOT NULL
-    );
-  """);
+    )
 
-  await database.execute("""
     CREATE TABLE genre(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name VARCHAR NOT NULL
-    );
-  """);
+    )
 
-  await database.execute("""
+
     CREATE TABLE game(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,
@@ -68,19 +65,15 @@ class DatabaseService {
       description TEXT NOT NULL,
       release_date VARCHAR NOT NULL,
       FOREIGN KEY(user_id) REFERENCES user(id)
-    );
-  """);
+    )
 
-  await database.execute("""
     CREATE TABLE game_genre(
       game_id INTEGER NOT NULL,
       genre_id INTEGER NOT NULL,
       FOREIGN KEY(game_id) REFERENCES game(id),
       FOREIGN KEY(genre_id) REFERENCES genre(id)
-    );
-  """);
+    )
 
-  await database.execute("""
     CREATE TABLE review(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER NOT NULL,
@@ -90,11 +83,8 @@ class DatabaseService {
       date VARCHAR NOT NULL,
       FOREIGN KEY(user_id) REFERENCES user(id),
       FOREIGN KEY(game_id) REFERENCES game(id)
-    );
-  """);
+    )
 
-  // Inserções iniciais de dados
-  await database.execute("""
     INSERT INTO user(name, email, password) VALUES('Teste 1', 'teste1@teste', '123456');
     INSERT INTO user(name, email, password) VALUES('Teste 2', 'teste2@teste', '123456');
     INSERT INTO user(name, email, password) VALUES('Teste 3', 'teste3@teste', '123456');
@@ -126,10 +116,55 @@ class DatabaseService {
     INSERT INTO review(user_id, game_id, score, description, date) VALUES(2, 1, 9.0, 'Teste', '2024-06-20');
     INSERT INTO review(user_id, game_id, score, description, date) VALUES(3, 1, 8.5, 'Teste', '2024-06-20');
     INSERT INTO review(user_id, game_id, score, description, date) VALUES(4, 1, 9.6, 'Teste', '2024-06-20');
-  """);
+  """;
+
+          await db.execute(sql);
+        }
+      )
+    );
+
+    return db;  
+  }
+
+  Future<int> insertTask(Task task) async {
+    var database = await db;
+
+    int id = await database!.insert(tableName, task.toMap());
+
+    return id;
+  }
+
+  getTasks() async {
+    var database = await db;
+    String sql = "SELECT * FROM $tableName";
+
+    List tasks = await database!.rawQuery(sql);
+
+    return tasks;
+  }
+
+  Future<int> updateTask(Task task) async {
+    var database = await db;
+
+    int result = await database!.update(
+      tableName,
+      task.toMap(),
+      where: "id = ?",
+      whereArgs: [task.id!]
+    );
+
+    return result;
+  }
+
+  Future<int> deleteTask(int id) async {
+    var database = await db;
+
+    int result = await database!.delete(
+      tableName,
+      where: "id = ?",
+      whereArgs: [id]
+    );
+
+    return result;
+  }
 }
-
-}
-
-
-

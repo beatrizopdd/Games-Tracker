@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:games_tracker/database/database_service.dart';
+
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -59,18 +59,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   backgroundColor: Color(0x00000000),
                 ),
-                onPressed: () async {
-                  DatabaseService dbService = DatabaseService();
-                  final path = await dbService.fullPath;
-                  //await deleteDatabase(path);
-                  print(path);
-
-                  // Inicialize o banco de dados e crie tabelas
-                  await dbService.database;
-
-                  // Imprima todas as tabelas no terminal
-                  await dbService.printAllTables();
-                  // Implementar a lógica de login
+                onPressed: () {
                 },
                 child: const Text(
                   'Entrar',
