@@ -1,36 +1,36 @@
 # Games Tracker
 
 Permitir ao usuário:
-- [  ] Criar 
-- [  ] Listar por data de lançamento, gênero e nota da review;
-- [  ] Editar
-- [  ] Remover
-- [  ] Incluir uma review;
+- [ ] Criar 
+- [ ] Listar por data de lançamento, gênero e nota da review;
+- [ ] Editar
+- [ ] Remover
+- [ ] Incluir uma review;
 
 ### Primeira Tela
 
-- [  ] Logar
-- [  ] Cadastrar
-- [  ] Acessar sem cadastro
+- [ ] Logar
+- [ ] Cadastrar
+- [ ] Acessar sem cadastro
 
 ### Dashboard
-- [  ] Filtros (data de lançamento, gênero e nota da review)
-- [  ] Botão de buscar
-- [  ] Lista de jogos adicionados com nome, imagem(opcional) e a média das notas das reviews (CADASTRADOS)
-- [  ] Lista de jogos com review recente com nome, imagem(opcional) e a média das notas das reviews
-- [  ] Botão de adicionar jogo (CADASTRADOS)
-- [  ] Botão para deslogar (CADASTRADOS)
-- [  ] Tela de reviews dos últimos 7 dias (CADASTRADOS)
+- [ ] Filtros (data de lançamento, gênero e nota da review)
+- [ ] Botão de buscar
+- [ ] Lista de jogos adicionados com nome, imagem(opcional) e a média das notas das reviews (CADASTRADOS)
+- [ ] Lista de jogos com review recente com nome, imagem(opcional) e a média das notas das reviews
+- [ ] Botão de adicionar jogo (CADASTRADOS)
+- [ ] Botão para deslogar (CADASTRADOS)
+- [ ] Tela de reviews dos últimos 7 dias (CADASTRADOS)
 
 ### Página do jogo
-- [  ] Detalhes do jogo
-- [  ] Botão de adicionar review (CADASTRADOS)
-- [  ] Botão de deletar jogo (CADASTRADOS)
-- [  ] Botão de ver reviews
+- [ ] Detalhes do jogo
+- [ ] Botão de adicionar review (CADASTRADOS)
+- [ ] Botão de deletar jogo (CADASTRADOS)
+- [ ] Botão de ver reviews
 
 ### Página de reviews
-- [  ] Nota
-- [  ] Descrição
+- [ ] Nota
+- [ ] Descrição
 
 Deve utilizar a api sqflite ou sqflite_common_ffi para implementar as tabelas no SQLlite.
 
