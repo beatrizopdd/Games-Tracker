@@ -134,8 +134,7 @@ class _FeedState extends State<Feed> {
             // Logout
             TextButton.icon(
               onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed('/home');
               },
               icon: const Icon(Icons.logout),
               label: const Text("Logout"),
@@ -227,13 +226,14 @@ class _FeedState extends State<Feed> {
                   // Botão de envio
                   TextButton(
                     child: const Text("Adicionar"),
-                    onPressed: () {
-                      GameController.cadastraGame(
+                    onPressed: () async {
+                      int result = await GameController.cadastraGame(
                           user.id,
                           _nameController.text,
                           _descriptionController.text,
                           _releaseDateController.text,
                           _genreController.text);
+
                       // INSERE NO BANCO DE DADOS
                       Navigator.pop(context);
                     },

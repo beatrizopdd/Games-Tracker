@@ -13,6 +13,7 @@ void main(){
       routes: {
         "/feed": (context) => const Feed(),
         "/game_page": (context) => const GamePage(),
+        "/home": (context) => const Home()
       },
     ),
   );
