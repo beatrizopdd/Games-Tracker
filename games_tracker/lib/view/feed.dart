@@ -19,7 +19,17 @@ class _FeedState extends State<Feed> {
   TextEditingController _genreController = TextEditingController();
 
   // Lista de jogos
-  List<Game> gameList = [];
+  Future<List<Game>> getGames() async {
+    print("Aqui");
+    List<Game> gameList = await GameController.objetifyTableGame();
+    return gameList;
+  }
+
+  @override
+  void initState() {
+    getGames();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +163,7 @@ class _FeedState extends State<Feed> {
             context: context,
             builder: (context) {
               return AlertDialog(
+                scrollable: true,
                 title: const Text("Adicionar jogo"),
 
                 // Campos para preenchimento
@@ -262,44 +273,68 @@ class _FeedState extends State<Feed> {
           const SizedBox(height: 10),
 
           // Lista de Jogos
-          Expanded(
-            child: ListView.builder(
-              itemCount: gameList.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  contentPadding: const EdgeInsets.all(5),
+          FutureBuilder(
+            future: getGames(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.done:
+                  if (snapshot.hasError) {
+                    return const Center(
+                        child: Icon(
+                            Icons.signal_wifi_connected_no_internet_4_rounded));
+                  } else {
+                    List<Game>? gameList = snapshot.data;
+                    return Expanded(
+                      child: ListView.builder(
+                        itemCount: gameList.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            contentPadding: const EdgeInsets.all(5),
+                            leading:
+                                const Icon(Icons.videogame_asset, size: 40),
 
-                  leading: const Icon(Icons.videogame_asset, size: 40),
+                            // Informações
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                // Nome
+                                Expanded(child: Text(gameList[index].name)),
 
-                  // Informações
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // Nome
-                      Expanded(child: Text(gameList[index].name)),
+                                // Média
+                                Row(
+                                  children: [
+                                    Text(
+                                      // INSERIR MÉDIA
+                                      "${index * 1.5} ",
+                                      style: const TextStyle(fontSize: 15),
+                                    ),
+                                    const Icon(
+                                      Icons.star,
+                                      size: 20,
+                                      color: Colors.amber,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
 
-                      // Média
-                      Row(
-                        children: [
-                          Text(
-                            // INSERIR MÉDIA
-                            "${index * 1.5} ",
-                            style: const TextStyle(fontSize: 15),
-                          ),
-                          const Icon(Icons.star, size: 20, color: Colors.amber),
-                        ],
+                            // Entrar na página
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                "/game_page",
+                                arguments: [user, gameList[index]],
+                              );
+                            },
+                          );
+                        },
                       ),
-                    ],
-                  ),
+                    );
+                  }
 
-                  // Entrar na página
-                  onTap: () {
-                    Navigator.of(context).pushNamed("/game_page",
-                        arguments: [user, gameList[index]]);
-                  },
-                );
-              },
-            ),
+                default:
+                  return const Center(child: CircularProgressIndicator());
+              }
+            },
           ),
         ],
       ),
