@@ -36,7 +36,7 @@ class GameController {
     int result = await database!
         .insert('game', {'user_id': user_id,'name': name, 'description': description, 'release_date': release_date});
 
-    //int res_gen = insertGenre(genre);//Atribui à alguém só para printar.
+    int res_gen = await GenreController.insertGenre(genre);//Atribui à alguém só para printar.
     //mandar id do game pra genre_game e o id do genre pra la também, o res_gen e o result geram os ids
     print(result);
     return result;

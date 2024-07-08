@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../model/genre.dart';
 
-class GameController {
+class GenreController {
   static final String tableName = "game";
   static Database? db;
 

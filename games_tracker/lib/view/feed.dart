@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:games_tracker/controller/game_controller.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
 
@@ -15,16 +16,17 @@ class _FeedState extends State<Feed> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _releaseDateController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _genreController = TextEditingController();
 
   // Lista de jogos
-   List<Game> gameList = [];
+  List<Game> gameList = [];
 
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context)!.settings.arguments as User;
 
     return Scaffold(
-      // Cabeçalho 
+      // Cabeçalho
       appBar: AppBar(
         // Título do feed
         title: const Text(
@@ -91,7 +93,7 @@ class _FeedState extends State<Feed> {
         ],
       ),
 
-      // Menu 
+      // Menu
       drawer: Drawer(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -176,7 +178,7 @@ class _FeedState extends State<Feed> {
                     // Campo do ano de lançamento
                     TextField(
                       controller: _releaseDateController,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.calendar_month),
                         labelText: "Ano de lançamento",
@@ -201,6 +203,22 @@ class _FeedState extends State<Feed> {
                         ),
                       ),
                     ),
+
+                    // Espaço
+                    const SizedBox(height: 25),
+
+                    // Campo de Gênero
+                    TextField(
+                      controller: _genreController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.extension),
+                        labelText: "Gênero",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
 
@@ -210,11 +228,12 @@ class _FeedState extends State<Feed> {
                   TextButton(
                     child: const Text("Adicionar"),
                     onPressed: () {
-                      Game newGame = Game(
-                          _nameController.text,
+                      GameController.cadastraGame(
                           user.id,
+                          _nameController.text,
+                          _descriptionController.text,
                           _releaseDateController.text,
-                          _descriptionController.text);
+                          _genreController.text);
                       // INSERE NO BANCO DE DADOS
                       Navigator.pop(context);
                     },
@@ -250,7 +269,6 @@ class _FeedState extends State<Feed> {
                 return ListTile(
                   contentPadding: const EdgeInsets.all(5),
 
-                  // Gênero
                   leading: const Icon(Icons.videogame_asset, size: 40),
 
                   // Informações
