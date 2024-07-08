@@ -162,25 +162,69 @@ class _GamePageState extends State<GamePage> {
             child: ListView.builder(
               itemCount: reviewList.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  contentPadding: const EdgeInsets.all(5),
-
-                  // Gênero
-                  leading: const Icon(Icons.person, size: 40),
-
-                  // Nota
-                  title: Row(
-                    children: [
-                      Text(
-                        "${reviewList[index].score}",
-                        style: const TextStyle(fontSize: 15),
-                      ),
-                      const Icon(Icons.star, size: 20, color: Colors.amber),
-                    ],
+                return Dismissible(
+                  key: Key(DateTime.now().microsecond.toString()), 
+                  
+                  // Aparência
+                  background: Container(
+                    color: Colors.blue,
+                    padding: const EdgeInsets.all(16),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [Icon(Icons.edit, color: Colors.white)],
+                    ),
                   ),
+                  secondaryBackground: Container(
+                    color: Colors.red,
+                    padding: const EdgeInsets.all(16),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [Icon(Icons.delete, color: Colors.white)],
+                    ),
+                  ),
+                  
+                  // Ações
+                  onDismissed: (direction) {
+                    // Atualizar review
+                    if (direction == DismissDirection.startToEnd) {
+  
+                    // Remover review
+                    } else if (direction == DismissDirection.endToStart) {
+                      final snackBar = SnackBar(
+                        content: const Text("Review excluída!"),
+                        duration: const Duration(seconds: 5),
+                        action: SnackBarAction(
+                          label: "Desfazer",
+                          onPressed: () {
+                            setState(() {});
+                          },
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  },
+                  
+                  // Corpo
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(5),
 
-                  // Descrição
-                  subtitle: Text(reviewList[index].description),
+                    // Gênero
+                    leading: const Icon(Icons.person, size: 40),
+
+                    // Nota
+                    title: Row(
+                      children: [
+                        Text(
+                          "${reviewList[index].score}",
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                        const Icon(Icons.star, size: 20, color: Colors.amber),
+                      ],
+                    ),
+
+                    // Descrição
+                    subtitle: Text(reviewList[index].description),
+                  ),
                 );
               },
             ),
