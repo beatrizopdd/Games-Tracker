@@ -35,7 +35,9 @@ class UserController {
 
     int result = await database!
         .insert('user', {'name': nome, 'email': email, 'password': senha});
-    return result;
+
+    
+    return result;//result é o id do cara inserido
   }
 
   static Future<int> deleteUser(String nome) async {

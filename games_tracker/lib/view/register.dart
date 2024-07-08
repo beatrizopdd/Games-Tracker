@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/user_controller.dart';
+import 'package:games_tracker/controller/game_controller.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -122,6 +123,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   UserController.deleteUser('');
                   UserController.printaTableUser();
                   UserController.findUser(_emailController.text, _senhaController.text);
+                  //GameController.deleteGame('');
+                  GameController.insertGame(1,'Teste','Sla','20-03-11','Acao');
+                  GameController.printaTableGame();
+                  GameController.findGame('God of War');
                 
                 },
                 child: const Text('Cadastrar',
