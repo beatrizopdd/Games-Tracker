@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/user_controller.dart';
 import 'package:games_tracker/controller/game_controller.dart';
 import 'package:games_tracker/view/login.dart';
-
+import 'package:games_tracker/controller/genre_controller.dart';
+import 'package:games_tracker/controller/game_genre_controller.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -135,6 +136,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   //GameController.insertGame(1,'Teste','Sla','20-03-11','Acao');
                   GameController.printaTableGame();
                   GameController.findGame('Elden Ring');
+                  GenreController.printaTableGenre();
+                  GenreController.deleteGenre('RPG');
+                  //Game_Genre_Controller.printaTableGame_Genre();
                 
                 },
                 child: const Text('Cadastrar',

@@ -2,7 +2,10 @@ import 'database_controller.dart';
 
 import 'package:sqflite/sqflite.dart';
 import '../controller/genre_controller.dart';
+import '../controller/game_genre_controller.dart';
+
 import '../model/game.dart';
+
 
 
 class GameController {
@@ -35,8 +38,16 @@ class GameController {
 
     int result = await database!
         .insert('game', {'user_id': user_id,'name': name, 'description': description, 'release_date': release_date});
+    int res_gen = await GenreController.cadastraGenre(genre);
 
-    int res_gen = await GenreController.insertGenre(genre);//Atribui à alguém só para printar.
+    print("resgen $res_gen");
+
+    if(result > 0 && res_gen >0){
+      Game_Genre_Controller.insert_game_genre(result,res_gen);//AJEITAR
+    }    
+
+
+    
     //mandar id do game pra genre_game e o id do genre pra la também, o res_gen e o result geram os ids
     print(result);
     return result;
