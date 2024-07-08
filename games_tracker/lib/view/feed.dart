@@ -36,6 +36,15 @@ class _FeedState extends State<Feed> {
     return gameList;
   }
 
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2), // Duração do SnackBar
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     user = ModalRoute.of(context)!.settings.arguments as User;
@@ -263,6 +272,16 @@ class _FeedState extends State<Feed> {
                           _releaseDateController.text,
                           _genreController.text);
 
+                      if (result == -1) {
+                        _showMessage("O jogo já está cadastrado no sistema!");
+                      } else {
+                      if (result != 0) {
+                        _showMessage("Cadastro do jogo realizado com sucesso!");
+                      } else {
+                      _showMessage(
+                          "Não foi possível realizar o cadastro do jogo, tente novamente.");
+                    }
+                    }
                       // INSERE NO BANCO DE DADOS
                       Navigator.pop(context);
                     },
