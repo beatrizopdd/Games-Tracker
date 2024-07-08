@@ -1,64 +1,118 @@
-/*import 'package:sqflite_common/sqflite.dart';
+import 'package:sqflite_common/sqflite.dart';
 import 'package:sqflite_common/sqlite_api.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
-import 'dart:io' as io;
 import 'database_controller.dart';
-
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../model/user.dart';
 
-class GameController {
+class UserController {
   static final String tableName = "user";
   static Database? db;
 
+  static Future<Database?> get _db async {
+    return db ??= await DatabaseController.db;
+  }
 
-  Future<Database?> get _db async {
-    /*if (_db == null) {
-      _db = initDb();
+  static Future<void> printaTableUser() async {
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query('user');
+    print("\n");
+    print("\n");
+    print("\n");
+    print("\n");
+    print("\n");
+    for (var row in result) {
+      print(row);
     }
-    If é substituído pelo comando "??="
-    */
-
-    db ??= await DatabaseController.db;
-
-    return db;
+    print("\n");
+    print("\n");
+    print("\n");
+    print("\n");
+    print("\n");
   }
 
-  Future<int> insertuser(User user) async {
-    var database = db;
+  static Future<int> insertUser(String nome, String email, String senha) async {
+    var database = await _db;
 
-    int id = await database!.insert(tableName, user.toMap());
-
-    return id;
-  }
-
-  getgames() async {
-    var database = db;
-    String sql = "SELECT * FROM $tableName";
-
-    List games = await database!.rawQuery(sql);
-
-    return games;
-  }
-
-  Future<int> updategame(User user) async {
-    var database = db;
-
-    int result = await database!.update(tableName, user.toMap(),
-        where: "id = ?", whereArgs: [user.id!]);
-
+    int result = await database!
+        .insert('user', {'name': nome, 'email': email, 'password': senha});
     return result;
   }
 
-  Future<int> deletegame(int id) async {
-    var database = db;
+  static Future<int> deleteUser(String nome) async {
+    var database = await _db;
+    return await database!.delete('user', where: 'name = ?', whereArgs: [nome]);
+  }
 
-    int result =
-        await database!.delete(tableName, where: "id = ?", whereArgs: [id]);
+  static Future<User?> findUser(String email, String senha) async {
+    // Definindo os parâmetros para a consulta
+    String table = 'user';
+    List<String> columns = ['id', 'name', 'email', 'password'];
+    String where = 'email LIKE ? AND password LIKE ?';
+    List<dynamic> whereArgs = [email, senha];
 
-    return result;
+    // Executando a consulta
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+    );
+
+    // Verificando se a lista não está vazia antes de criar o usuário
+
+    User? user;
+    if (result.isNotEmpty) {
+      user = User.fromMap(result.first);
+    }
+
+    // Imprimindo o usuário para verificar o mapeamento
+
+    if (user != null) {
+      print(
+          'ID: ${user.id}, Name: ${user.name}, Email: ${user.email}, Password: ${user.password}');
+    } else {
+      print('Nenhum usuário encontrado na lista.');
+    }
+
+    return user;
+  }
+
+  static Future<int> cadastraUser(
+      String nome, String email, String senha) async {
+    if (nome == '' || email == '' || senha == '') {
+      return 0;
+    }
+
+    // Definindo os parâmetros para a consulta
+    String table = 'user';
+    List<String> columns = ['id', 'name', 'email', 'password'];
+    String where = 'email LIKE ?';
+    List<dynamic> whereArgs = [email];
+    String? groupBy;
+    String? having;
+    String? orderBy;
+    int? limit;
+    int? offset;
+
+    // Executando a consulta
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
+      limit: limit,
+      offset: offset,
+    );
+
+    if (result.isEmpty) {
+      return insertUser(nome, email, senha);
+    } else {
+      return -1;
+    }
   }
 }
-*/
