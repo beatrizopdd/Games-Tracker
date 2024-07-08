@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                     ),
                     onPressed: () {
-                      // Acessar sem login
+                      Navigator.of(context).pushNamed('/feed_visitante');
                     },
                     child: const Text(
                       'Acessar sem login',

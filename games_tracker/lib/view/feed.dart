@@ -11,6 +11,7 @@ class Feed extends StatefulWidget {
 
 class _FeedState extends State<Feed> {
   late User user;
+  int op = 1;
 
   // Para o novo jogo
   TextEditingController _nameController = TextEditingController();
@@ -19,16 +20,20 @@ class _FeedState extends State<Feed> {
   TextEditingController _genreController = TextEditingController();
 
   // Lista de jogos
-  Future<List<Game>> getGames() async {
-    print("Aqui");
-    List<Game> gameList = await GameController.objetifyTableGame();
-    return gameList;
-  }
 
-  @override
-  void initState() {
-    getGames();
-    super.initState();
+  Future<List<Game>> getGames() async {
+    List<Game> gameList = [];
+    switch (op) {
+      case 0:
+        gameList = await GameController.objetifyTableGame(user.id);
+        break;
+      case 1:
+        gameList = await GameController.objetifyTableGame(null);
+        break;
+      default:
+        break;
+    }
+    return gameList;
   }
 
   @override
@@ -126,10 +131,23 @@ class _FeedState extends State<Feed> {
             ),
 
             const SizedBox(height: 20),
-
+            
+            //Todos os jogos
+            TextButton(
+              onPressed: () {
+                op = 1;
+                setState(() {
+                });
+              },
+              child: const Text("Todos os jogos"),
+            ),
             // Meus jogos
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                op = 0;
+                setState(() {
+                });
+              },
               child: const Text("Meus jogos"),
             ),
 
@@ -286,7 +304,7 @@ class _FeedState extends State<Feed> {
                     List<Game>? gameList = snapshot.data;
                     return Expanded(
                       child: ListView.builder(
-                        itemCount: gameList.length,
+                        itemCount: gameList?.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                             contentPadding: const EdgeInsets.all(5),
@@ -298,7 +316,7 @@ class _FeedState extends State<Feed> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 // Nome
-                                Expanded(child: Text(gameList[index].name)),
+                                Expanded(child: Text(gameList![index].name)),
 
                                 // Média
                                 Row(
