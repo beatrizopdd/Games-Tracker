@@ -1,11 +1,8 @@
-import 'package:sqflite_common/sqflite.dart';
-import 'package:sqflite_common/sqlite_api.dart';
+import 'database_controller.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'dart:io' as io;
-import 'database_controller.dart';
-
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../model/game.dart';
 
@@ -21,8 +18,8 @@ class GameController {
     If é substituído pelo comando "??="
     */
 
-    db ??= await DatabaseController.db;
-
+    db ?? await DatabaseController.db;
+    
     return db;
   }
 

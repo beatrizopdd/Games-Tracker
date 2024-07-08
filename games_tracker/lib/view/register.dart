@@ -1,7 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:games_tracker/controller/user_controller.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key? key}) : super(key: key);
+
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController _nomeController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _senhaController = TextEditingController();
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2), // Duração do SnackBar
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +48,7 @@ class RegisterPage extends StatelessWidget {
                   ),
                   prefixIcon: const Icon(Icons.person),
                 ),
+                controller: _nomeController,
               ),
 
               // Espaço
@@ -43,6 +63,7 @@ class RegisterPage extends StatelessWidget {
                   ),
                   prefixIcon: const Icon(Icons.email),
                 ),
+                controller: _emailController,
               ),
 
               // Espaço
@@ -58,6 +79,7 @@ class RegisterPage extends StatelessWidget {
                   prefixIcon: const Icon(Icons.lock),
                 ),
                 obscureText: true,
+                controller: _senhaController,
               ),
 
               // Espaço
@@ -72,8 +94,26 @@ class RegisterPage extends StatelessWidget {
                   ),
                   backgroundColor: Color(0x00000000),
                 ),
-                onPressed: () {
-                  // Implementar a lógica de cadastro
+                onPressed: () async {
+                  int final_result = await UserController.cadastraUser(
+                      _nomeController.text,
+                      _emailController.text,
+                      _senhaController.text);
+
+                  if (final_result == -1) {
+                    _showMessage("Este email já foi cadastrado!");
+                  } else {
+                    if (final_result != 0) {
+                      _showMessage("Cadastro realizado com sucesso!");
+                    } else {
+                      _showMessage(
+                          "Não foi possível realizar o cadastro, tente novamente.");
+                    }
+                  }
+                  UserController.deleteUser('');
+                  UserController.printaTableUser();
+                  UserController.findUser(_emailController.text, _senhaController.text);
+                
                 },
                 child: const Text('Cadastrar',
                     style: TextStyle(color: Colors.black26)),

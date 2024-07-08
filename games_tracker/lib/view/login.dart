@@ -1,9 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:games_tracker/controller/database_controller.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:games_tracker/controller/user_controller.dart';
+import 'package:games_tracker/model/user.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _senhaController = TextEditingController();
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: Duration(seconds: 2), // Duração do SnackBar
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +48,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   prefixIcon: const Icon(Icons.email),
                 ),
+                controller: _emailController,
               ),
 
               // Espaço
@@ -46,6 +64,7 @@ class LoginPage extends StatelessWidget {
                   prefixIcon: const Icon(Icons.lock),
                 ),
                 obscureText: true,
+                controller: _senhaController,
               ),
 
               // Espaço
@@ -61,10 +80,20 @@ class LoginPage extends StatelessWidget {
                   backgroundColor: Color(0x00000000),
                 ),
                 onPressed: () async {
-                  Database? database = await DatabaseController.db;
-                  final List<Map<String, dynamic>> result = await database!.query('game');
-                    for (var row in result) {
-                    print(row);
+                  User? user;
+                  user = await UserController.findUser(
+                      _emailController.text, _senhaController.text);
+
+                  if (user != null) {
+                    print('FOI PRA PRÓXIMA PÁGINA!');
+                    /*Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NextPage(user),
+                        ),
+                      );*/
+                  } else {
+                    _showMessage("Esta conta não existe!");
                   }
                 },
                 child: const Text(
