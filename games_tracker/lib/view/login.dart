@@ -13,6 +13,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _senhaController = TextEditingController();
 
+  bool isVisible = false;
+
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -56,14 +58,21 @@ class _LoginPageState extends State<LoginPage> {
 
               // Campo da senha
               TextField(
+                obscureText: !isVisible,
                 decoration: InputDecoration(
+                  //icon: Icon(Icons.lock),
                   labelText: 'Senha',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(onPressed: ()
+                  {setState(() {
+                    isVisible = !isVisible;
+                  });
+                },icon:Icon(isVisible? Icons.visibility:Icons.visibility_off))
                 ),
-                obscureText: true,
+                
                 controller: _senhaController,
               ),
 
