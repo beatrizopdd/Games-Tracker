@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/user_controller.dart';
 import 'package:games_tracker/controller/game_controller.dart';
+import 'package:games_tracker/view/login.dart';
+
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key? key}) : super(key: key);
@@ -115,6 +117,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   } else {
                     if (final_result != 0) {
                       _showMessage("Cadastro realizado com sucesso!");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginPage(),
+                        ),
+                      );
                     } else {
                       _showMessage(
                           "Não foi possível realizar o cadastro, tente novamente.");

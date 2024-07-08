@@ -60,19 +60,21 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 obscureText: !isVisible,
                 decoration: InputDecoration(
-                  //icon: Icon(Icons.lock),
-                  labelText: 'Senha',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(onPressed: ()
-                  {setState(() {
-                    isVisible = !isVisible;
-                  });
-                },icon:Icon(isVisible? Icons.visibility:Icons.visibility_off))
-                ),
-                
+                    //icon: Icon(Icons.lock),
+                    labelText: 'Senha',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isVisible = !isVisible;
+                          });
+                        },
+                        icon: Icon(isVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off))),
                 controller: _senhaController,
               ),
 
@@ -94,13 +96,11 @@ class _LoginPageState extends State<LoginPage> {
                       _emailController.text, _senhaController.text);
 
                   if (user != null) {
-                    print('FOI PRA PRÓXIMA PÁGINA!');
-                    /*Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NextPage(user),
-                        ),
-                      );*/
+                    _emailController.text = '';
+                    _senhaController.text = '';
+                    isVisible = true;
+
+                    Navigator.of(context).pushNamed('/feed', arguments: user);
                   } else {
                     _showMessage("Esta conta não existe!");
                   }

@@ -17,7 +17,7 @@ class _FeedState extends State<Feed> {
   TextEditingController _descriptionController = TextEditingController();
 
   // Lista de jogos
-  late List<Game> gameList;
+   List<Game> gameList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +132,8 @@ class _FeedState extends State<Feed> {
             // Logout
             TextButton.icon(
               onPressed: () {
-                Navigator.of(context).pop;
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
               },
               icon: const Icon(Icons.logout),
               label: const Text("Logout"),
