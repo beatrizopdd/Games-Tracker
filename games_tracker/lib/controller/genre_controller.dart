@@ -85,7 +85,7 @@ class GenreController {
     String table = 'genre';
     List<String> columns = ['id', 'name'];
     String where = 'name LIKE ?';
-    List<dynamic> whereArgs = ['%$name%'];
+    List<dynamic> whereArgs = ['$name'];
     String? groupBy;
     String? having;
     String? orderBy;
