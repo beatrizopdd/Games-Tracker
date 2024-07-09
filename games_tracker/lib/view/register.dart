@@ -129,17 +129,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           "Não foi possível realizar o cadastro, tente novamente.");
                     }
                   }
-                  //UserController.deleteUser('');
-                  UserController.printaTableUser();
-                  //UserController.findUser(_emailController.text, _senhaController.text);
-                  //GameController.deleteGame('y');
-                  //GameController.deleteGame('122');
-                  //GameController.insertGame(1,'Teste','Sla','20-03-11','Acao');
-                  GameController.printaTableGame();
-                  GameController.findGame('Elden Ring');
-                  GenreController.printaTableGenre();
-                  //GenreController.deleteGenre('2');
-                  Game_Genre_Controller.printaTableGame_Genre();
+                  //APAGR ISSO TUDO!!! ISSO SÃO SÓ TESTES
+                 
+                  //GameController.filtrodata(false);
                 
                 },
                 child: const Text('Cadastrar',

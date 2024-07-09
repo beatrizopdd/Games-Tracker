@@ -216,4 +216,137 @@ class GameController {
 
     return games; // Retorna a lista de jogos
   }
+ 
+  //filtro data crescente e decrescente
+  //filtro notas
+  static Future<List<Game>> filtrodata(bool order) async {
+  /*  if (name == '' ||
+        description == '' ||
+        release_date == '' ||
+        genre == '' ||
+        user_id < 1) {
+      return 0;
+    } */
+
+    // Definindo os parâmetros para a consulta
+    String table = 'game';
+    List<String> columns = [
+      'id',
+      'user_id',
+      'name',
+      'description',
+      'release_date'
+    ];
+      String where = 'name LIKE ?';
+      List<dynamic>? whereArgs;
+      String? groupBy;
+      String? having;
+      String orderBy = order ? 'release_date DESC': 'release_date ASC';//ordenação 
+      int? limit;
+      int? offset;
+
+
+    // Executando a consulta
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy, 
+      limit: limit,
+      offset: offset,
+    );
+    //ESTOU COMENDO 
+
+    List<Game> games = []; // Inicializa a lista de jogos
+    for (var game in result) {
+      Game value = Game.fromMap(game);
+      games.add(value);
+    }
+
+    for (var game in games) {
+      print(game.name);
+    }
+
+    return games;
+  }
+
+
+  //FAZER DEPOIS DO REVIEW
+  static Future<List<Game>> filtronota(bool order) async {//????
+  /*  if (name == '' ||
+        description == '' ||
+        release_date == '' ||
+        genre == '' ||
+        user_id < 1) {
+      return 0;
+    } */
+
+    // Definindo os parâmetros para a consulta
+    String table = 'game';
+    List<String> columns = [
+      'id',
+      'user_id',
+      'name',
+      'description',
+      'release_date'
+    ];
+      String where = 'name LIKE ?';
+      List<dynamic>? whereArgs;
+      String? groupBy;
+      String? having;
+      String orderBy = order ? 'release_date DESC': 'release_date ASC';//ordenação 
+      int? limit;
+      int? offset;
+
+
+    // Executando a consulta
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy, 
+      limit: limit,
+      offset: offset,
+    );
+    //ESTOU COMENDO 
+
+    List<Game> games = []; // Inicializa a lista de jogos
+    for (var game in result) {
+      Game value = Game.fromMap(game);
+      games.add(value);
+    }
+
+    for (var game in games) {
+      print(game.name);
+    }
+
+    return games;
+  }
+
+
+
+
+  //dar um find depois do textfield e assim receber os campos do jogo e  botar nos campos o que estava antes  e passar para ca o que quer mudar
+  Future<Game?> updategame(String name,String description,String release_date,int id) async {//para o usuario atualizar o jogo
+    var database = await _db;
+    Map<String, dynamic> updatedData = {
+    'description': description,
+    'release_date': release_date,
+    'name': name
+  };
+    int result =
+        await database!.update('game',updatedData, where: "id = ?", whereArgs: [id]);
+ 
+    Game? aux_game_genre  = await findGame(name);
+    
+    return (aux_game_genre);//cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
+  }
 }
