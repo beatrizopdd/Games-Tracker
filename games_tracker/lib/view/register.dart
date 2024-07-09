@@ -130,15 +130,16 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                   }
                   //UserController.deleteUser('');
-                  //UserController.printaTableUser();
+                  UserController.printaTableUser();
                   //UserController.findUser(_emailController.text, _senhaController.text);
-                  //GameController.deleteGame('');
+                  GameController.deleteGame('y');
+                  GameController.deleteGame('122');
                   //GameController.insertGame(1,'Teste','Sla','20-03-11','Acao');
                   GameController.printaTableGame();
                   GameController.findGame('Elden Ring');
                   GenreController.printaTableGenre();
-                  GenreController.deleteGenre('RPG');
-                  //Game_Genre_Controller.printaTableGame_Genre();
+                  //GenreController.deleteGenre('2');
+                  Game_Genre_Controller.printaTableGame_Genre();
                 
                 },
                 child: const Text('Cadastrar',

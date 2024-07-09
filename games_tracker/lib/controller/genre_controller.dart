@@ -119,6 +119,7 @@ class GenreController {
     int result =
         await database!.delete(tableName, where: "name = ?", whereArgs: [name]);
 
+    print(result);
     return result;
   }
 }

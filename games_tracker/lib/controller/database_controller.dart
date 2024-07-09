@@ -180,15 +180,6 @@ class DatabaseController {
 }
 
 void main() async {
-  await DatabaseController
-      .db; // Certifique-se de que o banco de dados está inicializado
+  
 
-  // Imprima o conteúdo da tabela 'user'
-  await DatabaseController.printTable('user');
-
-  // Imprima o conteúdo de outras tabelas conforme necessário
-  await DatabaseController.printTable('genre');
-  await DatabaseController.printTable('game');
-  await DatabaseController.printTable('game_genre');
-  await DatabaseController.printTable('review');
 }

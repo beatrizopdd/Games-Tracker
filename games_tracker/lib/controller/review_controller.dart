@@ -1,12 +1,8 @@
-/*import 'package:sqflite_common/sqflite.dart';
-import 'package:sqflite_common/sqlite_api.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as p;
-import 'dart:io' as io;
-import 'database_controller.dart';
+/*import 'database_controller.dart';
 
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
+import 'package:sqflite/sqflite.dart';
+import '../controller/genre_controller.dart';
+import '../controller/game_controller.dart';
 import '../model/review.dart';
 
 class GameController {
@@ -14,7 +10,7 @@ class GameController {
   static Database? db;
 
 
-  Future<Database?> get _db async {
+  static Future<Database?> get _db async {
     /*if (_db == null) {
       _db = initDb();
     }
@@ -26,15 +22,19 @@ class GameController {
     return db;
   }
 
-  Future<int> insertgame(Review review) async {
+  Future<int> insertgame(int user_id,int game_id,String description,double score,String date) async {
     var database = db;
 
-    int id = await database!.insert(tableName, review.toMap());
+    int id = await database!.insert(tableName,);
+
 
     return id;
   }
 
-  getgames() async {
+
+
+
+  static getgames() async {
     var database = db;
     String sql = "SELECT * FROM $tableName";
 

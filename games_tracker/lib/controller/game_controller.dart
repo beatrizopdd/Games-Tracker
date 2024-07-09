@@ -44,9 +44,9 @@ class GameController {
 
     print("resgen $res_gen");
 
-    if(result > 0 && res_gen >0){
-      Game_Genre_Controller.insert_game_genre(result,res_gen);//AJEITAR
-    }    
+    //if(result > 0 && res_gen >0){
+      //Game_Genre_Controller.insert_game_genre(result,res_gen);//AJEITAR
+    //}    
 
 
     
