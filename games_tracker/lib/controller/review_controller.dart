@@ -1,27 +1,21 @@
-/* import 'database_controller.dart';
+/*import 'database_controller.dart';
 
 import 'package:sqflite/sqflite.dart';
 import '../controller/genre_controller.dart';
 import '../controller/game_controller.dart';
 import '../model/review.dart';
 
-class GameController {
+class ReviewController {
   static final String tableName = "review";
   static Database? db;
 
 
   static Future<Database?> get _db async {
-    /*if (_db == null) {
-      _db = initDb();
-    }
-    If é substituído pelo comando "??="
-    */
-
     db ??= await DatabaseController.db;
 
     return db;
   }
-/*   static Future<Review?> findReview(String name) async{//bom para o filtro depois,
+   static Future<Review?> findReview(String name) async{//bom para o filtro depois,
     String table = 'review';
     List<String> columns = ['id','name'];
     String where = 'name LIKE ?';
@@ -56,7 +50,7 @@ class GameController {
       }
 
     return genre;
-  } */
+  } 
 
 
   static Future<int> insertreview(int user_id,int game_id,String description,double score,String date) async {
@@ -93,5 +87,4 @@ class GameController {
 
     return result;
   }
-}
- */
+}*/
