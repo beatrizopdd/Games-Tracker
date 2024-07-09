@@ -112,7 +112,7 @@ class GameController {
       print(
           'ID: ${game.id}, User_ID: ${game.user_id} Name: ${game.name}, Release_Date: ${game.release_date}, Description: ${game.description}');
     } else {
-      print('Nenhum usuário encontrado na lista.');
+      print('Nenhum game encontrado na lista.');
     }
     return game;
   }

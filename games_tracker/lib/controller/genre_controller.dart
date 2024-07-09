@@ -31,16 +31,15 @@ class GenreController {
   static Future<int> insertGenre(String genre) async {
     var database = await _db;
 
+    int result = await database!.insert('genre', {'name': genre});
 
-    int result = await database!
-        .insert('genre', {'name': genre});
-        
     return result;
   }
 
-  static Future<Genre?> findGenre(String name) async{//bom para o filtro depois,
+  static Future<Genre?> findGenre(String name) async {
+    //bom para o filtro depois,
     String table = 'genre';
-    List<String> columns = ['id','name'];
+    List<String> columns = ['id', 'name'];
     String where = 'name LIKE ?';
     List<dynamic> whereArgs = [name];
 
@@ -61,21 +60,21 @@ class GenreController {
     }
 
     // Imprimindo o genero para verificar o mapeamento
-    for(var i in result){//result tem todas as instancias do genero
+    for (var i in result) {
+      //result tem todas as instancias do genero
       print(i);
     }
-    
+
     if (genre != null) {
-      print(
-          'ID: ${genre.id}, Genero: ${genre.name}');
-      } else {
-        print('Nenhum item desse gênero encontrado na lista.');
-      }
+      print('ID: ${genre.id}, Genero: ${genre.name}');
+    } else {
+      print('Nenhum item desse gênero encontrado na lista.');
+    }
 
     return genre;
   }
 
-  static Future<int> cadastraGenre(
+  /*static Future<int> cadastraGenre(
       String name) async {
     if (name == '') {
       return 0;
@@ -122,6 +121,35 @@ class GenreController {
 
     print(result);
     return result;
+  }*/
+
+  static Future<int> cadastraGenre(String name) async {
+    if (name == '') {
+      return 0;
+    }
+
+    var database = await _db;
+    if (database == null) {
+      return -1;
+    }
+
+    // Verificação direta pelo nome exato
+    List<Map<String, dynamic>> result = await database.query(
+      'genre',
+      columns: ['id', 'name'],
+      where: 'name = ?',
+      whereArgs: [name],
+    );
+
+    print('Query result: $result');
+
+    if (result.isEmpty) {
+      return insertGenre(name);
+    } else {
+      print("Genre Já Existe");
+      int id = result[0]['id'];
+      return id;
+    }
+    
   }
 }
-
