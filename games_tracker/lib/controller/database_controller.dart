@@ -1,3 +1,4 @@
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -177,9 +178,21 @@ class DatabaseController {
       print(row);
     });
   }
+
+ // Método para obter o caminho do banco de dados
+  static Future<String> getDatabasePath() async {
+    final io.Directory appDocumentsDir =
+        await getApplicationDocumentsDirectory();
+    String path = p.join(appDocumentsDir.path, "databases", "database.db");
+    return path;
+  }
+
+  // Método para deletar o banco de dados
+  static Future<void> deleteDatabaseFile() async {
+    String dbPath = await getDatabasePath();
+    await deleteDatabase(dbPath);
+  }
 }
 
-void main() async {
-  
 
-}
+
