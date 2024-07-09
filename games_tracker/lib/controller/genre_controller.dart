@@ -65,12 +65,7 @@ class GenreController {
       print(i);
     }
     
-    if (genre != null) {
-      print(
-          'ID: ${genre.id}, Genero: ${genre.name}');
-      } else {
-        print('Nenhum item desse gênero encontrado na lista.');
-      }
+
 
     return genre;
   }
