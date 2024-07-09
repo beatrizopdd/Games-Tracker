@@ -35,31 +35,45 @@ class GameController {
   }
 
   static Future<int> insertGame(int user_id, String name, String description,
-      String release_date, String genre) async {
+      String release_date, String genre) async {//List<String> - for para verificação 
     var database = await _db;
 
     int result = await database!
         .insert('game', {'user_id': user_id,'name': name, 'description': description, 'release_date': release_date});
-    int res_gen = await GenreController.cadastraGenre(genre);
 
-    print("resgen $res_gen");
+    List<String> lista_generos = genre.split(',');
 
-    //if(result > 0 && res_gen >0){
-      //Game_Genre_Controller.insert_game_genre(result,res_gen);//AJEITAR
+    for(String s in lista_generos){
+      print("printando S $s");
+      int res_gen = await GenreController.cadastraGenre(s);//vai ficar dentro do for
+      print("resgen $res_gen");
+      int res_gen_game = await Game_Genre_Controller.cadastraGame_Genre(result,res_gen);
+      print("resgengame $res_gen_game");
+    }
+
+    //int res_gen = await GenreController.cadastraGenre(genre);//vai ficar dentro do for
+    //if(result > 0 && res_gen >0){//sla
+      //int res_gen_game = Game_Genre_Controller.cadastraGame_Genre(result,res_gen);//vai ficar dentro do for
+      //res_gen_game vai retornar se conseguiu inserir ou não, -1 NÃO INSERIU, >0 INSERIU(caso precise);
     //}    
-
-
-    
     //mandar id do game pra genre_game e o id do genre pra la também, o res_gen e o result geram os ids
+
     print(result);
     return result;
   }
 
   static Future<int> deleteGame(String name) async {
     var database = await _db;
+    
+    Game? game;
+    Game? aux_game_genre  = await findGame(name);
+    
+    
+    int game_genre_result = await database!.delete('game_genre',where: "game_id = ?", whereArgs: [aux_game_genre!.id]);
 
     int result =
         await database!.delete(tableName, where: "name = ?", whereArgs: [name]);
+
 
     return result;
   }

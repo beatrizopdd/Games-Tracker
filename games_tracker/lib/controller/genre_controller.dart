@@ -31,6 +31,7 @@ class GenreController {
   static Future<int> insertGenre(String genre) async {
     var database = await _db;
 
+
     int result = await database!
         .insert('genre', {'name': genre});
         
@@ -84,7 +85,7 @@ class GenreController {
     String table = 'genre';
     List<String> columns = ['id', 'name'];
     String where = 'name LIKE ?';
-    List<dynamic> whereArgs = [name];
+    List<dynamic> whereArgs = ['%$name%'];
     String? groupBy;
     String? having;
     String? orderBy;

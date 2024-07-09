@@ -132,8 +132,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   //UserController.deleteUser('');
                   UserController.printaTableUser();
                   //UserController.findUser(_emailController.text, _senhaController.text);
-                  GameController.deleteGame('y');
-                  GameController.deleteGame('122');
+                  //GameController.deleteGame('y');
+                  //GameController.deleteGame('122');
                   //GameController.insertGame(1,'Teste','Sla','20-03-11','Acao');
                   GameController.printaTableGame();
                   GameController.findGame('Elden Ring');
