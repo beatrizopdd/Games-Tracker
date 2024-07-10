@@ -40,10 +40,14 @@ class _FeedState extends State<Feed> {
         gameList = await GameController.objetifyTableGame(null);
         break;
       case 2:
-        gameList = await GameController.objetifyFiltroData('2023');//TODO COLOCAR PARAMETRO CORRETO E (JÁ DESCOBRI COMO USAR LIKE OU USAR METODO  DE BUSCA DE SUBSTRING, ass FRED)
+        gameList =
+            await GameController.objetifyFiltroData(_filterDataController.text);
+        //TODO COLOCAR PARAMETRO CORRETO E (JÁ DESCOBRI COMO USAR LIKE OU USAR METODO  DE BUSCA DE SUBSTRING, ass FRED)
         break;
       case 3:
-        gameList = await GameController.objetifyFiltroGenero('RPG');//TODO VER PARAMETRO BEA
+        gameList = await GameController.objetifyFiltroGenero(
+            _filterDataController.text);
+        //TODO VER PARAMETRO BEA
         break;
       default:
         break;
@@ -122,9 +126,7 @@ class _FeedState extends State<Feed> {
                             TextField(
                               controller: _filterDataController,
                               keyboardType: TextInputType.number,
-                              onTap: () {
-                                _filterDataController = TextEditingController();
-                              },
+                              onTap: () {},
                               enabled: (_filterController == 2),
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.calendar_month),
@@ -150,9 +152,7 @@ class _FeedState extends State<Feed> {
                               controller: _filterDataController,
                               keyboardType: TextInputType.text,
                               enabled: (_filterController == 3),
-                              onTap: () {
-                                _filterDataController = TextEditingController();
-                              },
+                              onTap: () {},
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.extension),
                                 border: OutlineInputBorder(

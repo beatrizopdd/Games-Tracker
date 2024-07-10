@@ -9,11 +9,10 @@ class Game_Genre_Controller {
   static Database? db;
 
   static Future<Database?> get _db async {
-
     db ??= await DatabaseController.db;
-
     return db;
   }
+  
   static Future<void> printaTableGame_Genre() async {
     var database = await _db;
     List<Map<String, dynamic>> result = await database!.query('game_genre');

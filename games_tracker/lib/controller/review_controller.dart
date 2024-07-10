@@ -1,25 +1,42 @@
-/*import 'database_controller.dart';
+import 'database_controller.dart';
 
 import 'package:sqflite/sqflite.dart';
-import '../controller/genre_controller.dart';
-import '../controller/game_controller.dart';
+/*import '../controller/genre_controller.dart';
+import '../controller/game_controller.dart';*/
 import '../model/review.dart';
 
 class ReviewController {
   static final String tableName = "review";
   static Database? db;
 
+  /*CREATE TABLE review(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            game_id INTEGER NOT NULL,
+            score REAL NOT NULL,
+            description TEXT,
+            date VARCHAR NOT NULL,
+            FOREIGN KEY(user_id) REFERENCES user(id),
+            FOREIGN KEY(game_id) REFERENCES game(id) */
 
   static Future<Database?> get _db async {
     db ??= await DatabaseController.db;
-
     return db;
   }
-   static Future<Review?> findReview(String name) async{//bom para o filtro depois,
+
+  static Future<Review?> findReview(int user_id, int game_id) async {
+    //bom para o filtro depois,
     String table = 'review';
-    List<String> columns = ['id','name'];
-    String where = 'name LIKE ?';
-    List<dynamic> whereArgs = [name];
+    List<String> columns = [
+      'id',
+      'user_id',
+      'game_id',
+      'score',
+      'description',
+      'date'
+    ];
+    String where = 'user_id = ? AND game_id = ?';
+    List<dynamic> whereArgs = [user_id, game_id];
 
     // Executando a consulta
     var database = await _db;
@@ -30,36 +47,164 @@ class ReviewController {
       whereArgs: whereArgs,
     );
 
-    // Verificando se a lista não está vazia antes de criar o genero
+    // Verificando se a lista não está vazia antes de criar o review
 
-    Review? genre;
+    Review? review;
     if (result.isNotEmpty) {
-      genre = Review.fromMap(result.first);
+      review = Review.fromMap(result.first);
     }
 
-    // Imprimindo o genero para verificar o mapeamento
-    for(var i in result){//result tem todas as instancias do genero
+    // Imprimindo o review para verificar o mapeamento
+    for (var i in result) {
       print(i);
     }
-    
-    if (genre != null) {
+
+    if (review != null) {
       print(
-          'ID: ${genre.id}, Genero: ${genre.name}');
-      } else {
-        print('Nenhum item desse gênero encontrado na lista.');
-      }
+          'ID: ${review.id}, USER_ID: ${review.user_id}, GAME_ID: ${review.game_id}, SCORE: ${review.score}, DESCRIPTION: ${review.date}');
+    } else {
+      print('Nenhum review encontrado na lista.');
+    }
 
-    return genre;
-  } 
+    return review;
+  }
 
 
-  static Future<int> insertreview(int user_id,int game_id,String description,double score,String date) async {
+  static Future<int> insertReview(int user_id,int game_id,String description,double score,String date) async {
     var database = await _db;
         
     int id = await database!.insert(tableName,{'user_id' : user_id,'game_id':game_id,'description':description,'score': score,'date':date });
 
     return id;
   }
+
+  Future<int> deleteReviewbyId(int id) async {
+    var database = db;
+    int result =
+        await database!.delete(tableName, where: "id = ?", whereArgs: [id]);
+    return result;
+  }
+
+  Future<int> deleteReviewbyGame(int game_id) async {
+    var database = db;
+    int result =
+        await database!.delete(tableName, where: "game_id = ?", whereArgs: [game_id]);
+    return result;
+  }
+
+  Future<int> deleteReviewbyUser(int user_id) async {
+    var database = db;
+    int result =
+        await database!.delete(tableName, where: "user_id = ?", whereArgs: [user_id]);
+    return result;
+  }
+
+  static Future<List<Review>> objetifyTableReviewbyUser(int? user_id) async {
+    var database = await _db;
+    List<Map<String, dynamic>> result = [];
+
+    if (user_id == null) {
+      result = await database!.query('review');
+    }else {
+      // Definindo os parâmetros para a consulta
+      String table = 'review';
+      List<String> columns = [
+        'id',
+        'user_id',
+        'game_id',
+        'score',
+        'description',
+        'date'
+      ];
+      String where = 'user_id LIKE ?';
+      List<dynamic> whereArgs = [user_id];
+
+      // Executando a consulta
+      var database = await _db;
+      result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs
+    );
+      
+    }
+    
+    // Apenas para depuração
+    print("\n" * 5);
+    for (var row in result) {
+      print(row);
+    }
+    print("\n" * 5);
+
+    List<Review> reviews = []; // Inicializa a lista de reviews
+    for (var game in result) {
+      Review value = Review.fromMap(game);
+      reviews.add(value);
+    }
+
+    for (var review in reviews) {
+      print(review.id);
+    }
+
+    return reviews; // Retorna a lista de reviews
+  }
+
+  static Future<List<Review>> objetifyTableReviewbyGame(int? game_id) async {
+    var database = await _db;
+    List<Map<String, dynamic>> result = [];
+
+    if (game_id == null) {
+      result = await database!.query('review');
+    }else {
+      // Definindo os parâmetros para a consulta
+      String table = 'review';
+      List<String> columns = [
+        'id',
+        'user_id',
+        'game_id',
+        'score',
+        'description',
+        'date'
+      ];
+      String where = 'game_id LIKE ?';
+      List<dynamic> whereArgs = [game_id];
+
+      // Executando a consulta
+      var database = await _db;
+      result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs
+    );
+      
+    }
+    
+    // Apenas para depuração
+    print("\n" * 5);
+    for (var row in result) {
+      print(row);
+    }
+    print("\n" * 5);
+
+    List<Review> reviews = []; // Inicializa a lista de reviews
+    for (var game in result) {
+      Review value = Review.fromMap(game);
+      reviews.add(value);
+    }
+
+    for (var review in reviews) {
+      print(review.id);
+    }
+
+    return reviews; // Retorna a lista de reviews
+  }
+
+  
+
+
+  /*
 
   static getgames() async {
     var database = db;
@@ -88,3 +233,4 @@ class ReviewController {
     return result;
   }
 }*/
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/review.dart';
 //import 'package:games_tracker/model/game.dart';
+import 'package:games_tracker/controller/review_controller.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
@@ -22,14 +23,15 @@ class _ReviewPageState extends State<ReviewPage> {
   // ver se game_id == 0
   Future<List<Review>> getReviews() async {
     List<Review> reviewList = [];
-    /*
-    switch (op) {
+
+    switch (game_id) {
       case 0:
-        reviewList = await GameController.objetifyTableGame(user.id);
+        reviewList = await ReviewController.objetifyTableReviewbyUser(user.id);
         break;
       default:
+        reviewList = await ReviewController.objetifyTableReviewbyGame(game_id);
         break;
-    }*/
+    }
     return reviewList;
   }
 
@@ -116,7 +118,6 @@ class _ReviewPageState extends State<ReviewPage> {
         ),
       );
     }
-
   }
 
   // Deletar review

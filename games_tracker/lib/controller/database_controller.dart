@@ -17,6 +17,7 @@ class DatabaseController {
 
   static Future<Database?> get db async {
     _db ??= await _initDb();
+    _db?.execute('PRAGMA foreign_keys = ON');
     return _db;
   }
 
@@ -30,6 +31,7 @@ class DatabaseController {
         await openDatabase(path, version: 1, onCreate: (db, version) async {
       print('creating');
       // Criação das tabelas
+      await db.execute('PRAGMA foreign_keys = ON');
       await db.execute('''
           CREATE TABLE user(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -179,7 +181,7 @@ class DatabaseController {
     });
   }
 
- // Método para obter o caminho do banco de dados
+  // Método para obter o caminho do banco de dados
   static Future<String> getDatabasePath() async {
     final io.Directory appDocumentsDir =
         await getApplicationDocumentsDirectory();
@@ -193,6 +195,3 @@ class DatabaseController {
     await deleteDatabase(dbPath);
   }
 }
-
-
-
