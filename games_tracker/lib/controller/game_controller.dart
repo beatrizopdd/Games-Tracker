@@ -398,6 +398,7 @@ class GameController {
 
     // Definindo os parâmetros para a consulta
     Genre? aux_game_genre  = await GenreController.findGenre(name);
+    //teste
     String table = 'game_genre';
     List<String> columns = [
       'game_id',

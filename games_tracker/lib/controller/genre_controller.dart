@@ -124,6 +124,7 @@ class GenreController {
   }*/
 
   static Future<int> cadastraGenre(String name) async {
+    //teste
     if (name == '') {
       return 0;
     }
