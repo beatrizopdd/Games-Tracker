@@ -40,7 +40,7 @@ class _FeedState extends State<Feed> {
         gameList = await GameController.objetifyTableGame(null);
         break;
       case 2:
-        gameList = await GameController.objetifyFiltroData('2022');//TODO DESCOBRIR COMO USAR LIKE OU USAR METODO  DE BUSCA DE SUBSTRING
+        gameList = await GameController.objetifyFiltroData('2023');//TODO COLOCAR PARAMETRO CORRETO E (JÁ DESCOBRI COMO USAR LIKE OU USAR METODO  DE BUSCA DE SUBSTRING, ass FRED)
         break;
       case 3:
         gameList = await GameController.objetifyFiltroGenero('RPG');//TODO VER PARAMETRO BEA
@@ -457,7 +457,7 @@ class _FeedState extends State<Feed> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 // Nome
-                                Expanded(child: Text(gameList![index].name)),
+                                Expanded(child: Text(gameList[index].name)),
 
                                 // Média
                                 const Row(

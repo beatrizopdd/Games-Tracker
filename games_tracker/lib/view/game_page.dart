@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/game_controller.dart';
-import 'package:games_tracker/model/genre.dart';
-import 'package:games_tracker/model/review.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
+/*import 'package:games_tracker/model/genre.dart';
+import 'package:games_tracker/model/review.dart';*/
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -181,7 +181,7 @@ class _GamePageState extends State<GamePage> {
                             _newNameController.text = game.name;
                             _newReleaseDateController.text = game.release_date;
                             _newDescriptionController.text = game.description;
-                            _newGenreController.text = game_gender_name; //HAVIA UM TODO AQUI MAS ACREDITO QUE JÁ RESOLVI
+                            _newGenreController.text = game_gender_name; //HAVIA UM TODO AQUI, OLHAR QUESTÃO DA PERSISTENCIA DO TEXTO
                             Navigator.pop(context);
                           },
                         ),

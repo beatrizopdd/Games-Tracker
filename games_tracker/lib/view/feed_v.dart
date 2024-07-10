@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:games_tracker/controller/game_controller.dart';
-import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
+/*import 'package:games_tracker/controller/game_controller.dart';
+import 'package:games_tracker/model/user.dart';*/
+
 
 class FeedV extends StatefulWidget {
   const FeedV({super.key});

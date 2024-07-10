@@ -1,9 +1,8 @@
 import 'database_controller.dart';
-
 import 'package:sqflite/sqflite.dart';
-import '../controller/genre_controller.dart';
+/*import '../controller/genre_controller.dart';
 import '../controller/game_controller.dart';
-import '../model/game_genre.dart';
+import '../model/game_genre.dart';*/
 
 class Game_Genre_Controller {
   static final String tableName = "game_genre";

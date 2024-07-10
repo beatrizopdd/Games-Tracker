@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/user_controller.dart';
-import 'package:games_tracker/controller/game_controller.dart';
 import 'package:games_tracker/view/login.dart';
-import 'package:games_tracker/controller/genre_controller.dart';
+/*import 'package:games_tracker/controller/genre_controller.dart';
 import 'package:games_tracker/controller/game_genre_controller.dart';
+import 'package:games_tracker/controller/game_controller.dart';*/
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key? key}) : super(key: key);

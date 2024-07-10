@@ -66,14 +66,14 @@ class GameController {
   static Future<int> deleteGame(String name) async {
     var database = await _db;
     
-    Game? game;
+    //Game? game;
     Game? aux_game_genre  = await findGame(name);
     
     
-    int game_genre_result = await database!.delete('game_genre',where: "game_id = ?", whereArgs: [aux_game_genre!.id]);
+    /*int game_genre_result =*/await database!.delete('game_genre',where: "game_id = ?", whereArgs: [aux_game_genre!.id]);
 
     int result =
-        await database!.delete(tableName, where: "name = ?", whereArgs: [name]);
+        await database.delete(tableName, where: "name = ?", whereArgs: [name]);
 
 
     return result;
@@ -276,8 +276,8 @@ class GameController {
       'description',
       'release_date'
     ];
-      String where = 'name LIKE ?';
-      List<dynamic> whereArgs = [release_date];
+      String where = 'release_date LIKE ?';
+      List<dynamic> whereArgs = ['%$release_date%'];
       String? groupBy;
       String? having;
       String? orderBy;//ordenação 
@@ -378,7 +378,7 @@ class GameController {
     'release_date': release_date,
     'name': name
   };
-    int result =
+    //int result =
         await database!.update('game',updatedData, where: "id = ?", whereArgs: [id]);
  
     Game? aux_game_genre  = await findGame(name);
@@ -485,7 +485,7 @@ class GameController {
     for (var row in genre_id_list) {
       var id = row['genre_id'];
       whereArgs = [id];
-      List<Map<String, dynamic>> genre_name = await database!.query(
+      List<Map<String, dynamic>> genre_name = await database.query(
         table,
         columns: columns,
         where: where,

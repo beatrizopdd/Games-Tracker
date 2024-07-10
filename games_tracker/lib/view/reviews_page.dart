@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/model/user.dart';
-import 'package:games_tracker/model/game.dart';
 import 'package:games_tracker/model/review.dart';
+//import 'package:games_tracker/model/game.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
