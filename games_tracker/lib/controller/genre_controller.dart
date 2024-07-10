@@ -60,10 +60,10 @@ class GenreController {
     }
 
     // Imprimindo o genero para verificar o mapeamento
-    for (var i in result) {
+    //for (var i in result) {
       //result tem todas as instancias do genero
-      print(i);
-    }
+     //print(i);
+    //}
 
     if (genre != null) {
       print('ID: ${genre.id}, Genero: ${genre.name}');
@@ -152,4 +152,5 @@ class GenreController {
     }
     
   }
+
 }

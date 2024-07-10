@@ -39,6 +39,12 @@ class _FeedState extends State<Feed> {
       case 1:
         gameList = await GameController.objetifyTableGame(null);
         break;
+      case 2:
+        gameList = await GameController.objetifyFiltroData('2022');//TODO DESCOBRIR COMO USAR LIKE OU USAR METODO  DE BUSCA DE SUBSTRING
+        break;
+      case 3:
+        gameList = await GameController.objetifyFiltroGenero('RPG');//TODO VER PARAMETRO BEA
+        break;
       default:
         break;
     }

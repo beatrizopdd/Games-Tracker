@@ -5,6 +5,7 @@ import '../controller/genre_controller.dart';
 import '../controller/game_genre_controller.dart';
 
 import '../model/game.dart';
+import '../model/genre.dart';
 
 
 
@@ -89,6 +90,44 @@ class GameController {
     ];
     String where = 'name LIKE ?';
     List<dynamic> whereArgs = [name];
+
+    // Executando a consulta
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+    );
+
+    // Verificando se a lista não está vazia antes de criar o jogo
+
+    Game? game;
+    if (result.isNotEmpty) {
+      game = Game.fromMap(result.first);
+    }
+
+    // Imprimindo o jogo para verificar o mapeamento
+
+    if (game != null) {
+      print(
+          'ID: ${game.id}, User_ID: ${game.user_id} Name: ${game.name}, Release_Date: ${game.release_date}, Description: ${game.description}');
+    } else {
+      print('Nenhum game encontrado na lista.');
+    }
+    return game;
+  }
+  static Future<Game?> findGameID(int id) async {
+    String table = 'game';
+    List<String> columns = [
+      'id',
+      'user_id',
+      'name',
+      'release_date',
+      'description'
+    ];
+    String where = 'id LIKE ?';
+    List<dynamic> whereArgs = [id];
 
     // Executando a consulta
     var database = await _db;
@@ -219,7 +258,7 @@ class GameController {
  
   //filtro data crescente e decrescente
   //filtro notas
-  static Future<List<Game>> filtrodata(bool order) async {
+  static Future<List<Game>> objetifyFiltroData(String release_date) async {
   /*  if (name == '' ||
         description == '' ||
         release_date == '' ||
@@ -238,15 +277,14 @@ class GameController {
       'release_date'
     ];
       String where = 'name LIKE ?';
-      List<dynamic>? whereArgs;
+      List<dynamic> whereArgs = [release_date];
       String? groupBy;
       String? having;
-      String orderBy = order ? 'release_date DESC': 'release_date ASC';//ordenação 
+      String? orderBy;//ordenação 
       int? limit;
       int? offset;
 
-
-    // Executando a consulta
+    // Executando a consulta 
     var database = await _db;
     List<Map<String, dynamic>> result = await database!.query(
       table,
@@ -298,7 +336,7 @@ class GameController {
       List<dynamic>? whereArgs;
       String? groupBy;
       String? having;
-      String orderBy = order ? 'release_date DESC': 'release_date ASC';//ordenação 
+      String? orderBy ;//ordenação 
       int? limit;
       int? offset;
 
@@ -332,8 +370,6 @@ class GameController {
   }
 
 
-
-
   //dar um find depois do textfield e assim receber os campos do jogo e  botar nos campos o que estava antes  e passar para ca o que quer mudar
   Future<Game?> updategame(String name,String description,String release_date,int id) async {//para o usuario atualizar o jogo
     var database = await _db;
@@ -348,5 +384,55 @@ class GameController {
     Game? aux_game_genre  = await findGame(name);
     
     return (aux_game_genre);//cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
+  }
+
+
+  static Future<List<Game>> objetifyFiltroGenero(String name) async {//name == nome do genero
+  /*  if (name == '' ||
+        description == '' ||
+        release_date == '' ||
+        genre == '' ||
+        user_id < 1) {
+      return 0;
+    } */
+
+    // Definindo os parâmetros para a consulta
+    Genre? aux_game_genre  = await GenreController.findGenre(name);
+    String table = 'game_genre';
+    List<String> columns = [
+      'game_id',
+      'genre_id',
+    ];
+      String where = 'genre_id LIKE ?';
+      List<dynamic> whereArgs = [aux_game_genre!.id];
+      String? groupBy;
+      String? having;
+      String? orderBy;
+      int? limit;
+      int? offset;
+
+    // Executando a consulta 
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy, 
+      limit: limit,
+      offset: offset,
+    );
+    print("sla");
+    List<Game> games = [];
+    for (var row in result) {
+      var gameId = row['game_id'];
+      Game? aux  =  await findGameID(gameId);
+      games.add(aux!);
+      print('Game ID: $gameId');
+    }
+
+    return games;
   }
 }
