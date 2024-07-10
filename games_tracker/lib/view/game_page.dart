@@ -13,9 +13,17 @@ class _GamePageState extends State<GamePage> {
   late User user;
   late Game game;
 
+  // Para atualização do jogo
+  TextEditingController _newNameController = TextEditingController();
+  TextEditingController _newReleaseDateController = TextEditingController();
+  TextEditingController _newDescriptionController = TextEditingController();
+  TextEditingController _newGenreController = TextEditingController();
+
   // Para a nova review
   double _scoreController = 0;
   TextEditingController _descriptionController = TextEditingController();
+
+  // TODO um get genero
 
   @override
   Widget build(BuildContext context) {
@@ -49,12 +57,142 @@ class _GamePageState extends State<GamePage> {
           ),
         ),
 
-        // Botão de deletar jogo
+        // Botão de deletar e atualizar o jogo
         actions: [
+          IconButton(
+            icon: const Icon(Icons.edit, color: Colors.white),
+            onPressed: () {
+              _newNameController.text = game.name;
+              _newReleaseDateController.text = game.release_date;
+              _newDescriptionController.text = game.description;
+              _newGenreController.text = "TODO INSERIR GENERO";
+
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    scrollable: true,
+                    title: const Text("Atualizar jogo"),
+
+                    // Campos para preenchimento
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Campo do nome
+                        TextField(
+                          controller: _newNameController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.edit),
+                            labelText: "Nome",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+
+                        // Espaço
+                        const SizedBox(height: 25),
+
+                        // Campo do ano de lançamento
+                        TextField(
+                          controller: _newReleaseDateController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.calendar_month),
+                            labelText: "Ano de lançamento",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+
+                        // Espaço
+                        const SizedBox(height: 25),
+
+                        // Campo da descrição
+                        TextField(
+                          controller: _newDescriptionController,
+                          maxLines: null,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.description),
+                            labelText: "Descrição",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+
+                        // Espaço
+                        const SizedBox(height: 25),
+
+                        // Campo de Gênero
+                        TextField(
+                          controller: _newGenreController,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.extension),
+                            labelText: "Gênero",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    // Botões
+                    actions: [
+                      // Botão de envio
+                      TextButton(
+                        child: const Text("Atualizar"),
+                        onPressed: () async {
+                          // TODO procedimentto para atualizar o jogo
+                          /*
+                          int result = await GameController.cadastraGame(
+                              user.id,
+                              _nameController.text,
+                              _descriptionController.text,
+                              _releaseDateController.text,
+                              _genreController.text);
+
+                          if (result == -1) {
+                            _showMessage(
+                                "O jogo já está cadastrado no sistema!");
+                          } else {
+                            if (result != 0) {
+                              _showMessage(
+                                  "Cadastro do jogo realizado com sucesso!");
+                            } else {
+                              _showMessage(
+                                  "Não foi possível realizar o cadastro do jogo, tente novamente.");
+                            }
+                          }*/
+                          Navigator.pop(context);
+                        },
+                      ),
+
+                      // Botão de cancelamento
+                      TextButton(
+                        child: const Text("Cancelar"),
+                        onPressed: () {
+                          _newNameController.text = game.name;
+                          _newReleaseDateController.text = game.release_date;
+                          _newDescriptionController.text = game.description;
+                          _newGenreController.text = "TODO INSERIR GENERO";
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          ),
+        
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.white),
             onPressed: () {
-              // PROCEDIMENTO PRA APAGAR
+              // TODO procedimentto para deletar o jogo
             },
           ),
         ],
@@ -98,7 +236,7 @@ class _GamePageState extends State<GamePage> {
                         TextField(
                           controller: _descriptionController,
                           keyboardType: TextInputType.text,
-                          maxLength: null,
+                          maxLines: null,
                           decoration: InputDecoration(
                             prefixIcon: const Icon(Icons.description),
                             labelText: "Comentário",
@@ -176,8 +314,8 @@ class _GamePageState extends State<GamePage> {
                     fontSize: 17,
                   ),
                 ),
-                // INSERIR MÉDIA
                 Text(
+                  // TODO inserir média (tirar const da row)
                   "inserir média",
                   style: const TextStyle(fontSize: 16),
                 ),

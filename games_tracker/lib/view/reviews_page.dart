@@ -14,8 +14,8 @@ class _ReviewPageState extends State<ReviewPage> {
   late int game_id;
 
   // Para a atualização da review
-  late double _scoreController;
-  TextEditingController _descriptionController = TextEditingController();
+  late double _newScoreController;
+  TextEditingController _newDescriptionController = TextEditingController();
 
   // Lista de reviews
   // pra diferenciar se vem do feed (Minhas reviews recentes) ou do jogo (Ver reviewes)
@@ -35,12 +35,83 @@ class _ReviewPageState extends State<ReviewPage> {
 
   // Atualizar review
   void updateReview(Review review) {
-    // PROCEDIMENTO PRA ATUALIZAR REVIEW
+    _newScoreController = review.score;
+    _newDescriptionController.text = review.description;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text("Adicionar review"),
+              scrollable: true,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Nota"),
+                  Slider(
+                    label: _newScoreController.toString(),
+                    value: _newScoreController,
+                    min: 0,
+                    max: 10,
+                    divisions: 10,
+                    onChanged: (value) {
+                      setState(() {
+                        _newScoreController = value;
+                      });
+                    },
+                  ),
+
+                  // Espaço
+                  const SizedBox(height: 10),
+
+                  // Descrição
+                  TextField(
+                    controller: _newDescriptionController,
+                    keyboardType: TextInputType.text,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.description),
+                      labelText: "Comentário",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              // Botões
+              actions: [
+                // Botão de envio
+                TextButton(
+                  child: const Text("Atualizar"),
+                  onPressed: () {
+                    // TODO procedimento de atualizar jogo
+                    Navigator.pop(context);
+                  },
+                ),
+
+                // Botão de cancelamento
+                TextButton(
+                  child: const Text("Cancelar"),
+                  onPressed: () {
+                    _newScoreController = review.score;
+                    _newDescriptionController.text = review.description;
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   // Deletar review
   void deleteReview(Review review) {
-    // PROCEDIMENTO PRA DELETAR REVIEW
+    // TODO PROCEDIMENTO PRA DELETAR REVIEW
   }
 
   @override

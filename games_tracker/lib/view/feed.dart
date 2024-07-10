@@ -24,7 +24,7 @@ class _FeedState extends State<Feed> {
   int _filterController = 2;
   TextEditingController _filterDataController = TextEditingController();
 
-  // Lista de jogos:
+  // TODO Lista de jogos:
   // op = 0 pra lista do usuario
   // op = 1 pra lista geral
   // op = 2 pra lista selecionada por data
@@ -84,7 +84,7 @@ class _FeedState extends State<Feed> {
           ),
         ),
 
-        // Filtro (ACESSA O DB)
+        // TODO Filtro
         actions: [
           IconButton(
             icon: const Icon(Icons.tune, color: Colors.white),
@@ -115,6 +115,10 @@ class _FeedState extends State<Feed> {
                             ),
                             TextField(
                               controller: _filterDataController,
+                              keyboardType: TextInputType.number,
+                              onTap: () {
+                                _filterDataController = TextEditingController();
+                              },
                               enabled: (_filterController == 2),
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.calendar_month),
@@ -138,7 +142,11 @@ class _FeedState extends State<Feed> {
                             ),
                             TextField(
                               controller: _filterDataController,
+                              keyboardType: TextInputType.text,
                               enabled: (_filterController == 3),
+                              onTap: () {
+                                _filterDataController = TextEditingController();
+                              },
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.extension),
                                 border: OutlineInputBorder(
@@ -161,7 +169,11 @@ class _FeedState extends State<Feed> {
                             ),
                             TextField(
                               controller: _filterDataController,
+                              keyboardType: TextInputType.number,
                               enabled: (_filterController == 4),
+                              onTap: () {
+                                _filterDataController = TextEditingController();
+                              },
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.star),
                                 border: OutlineInputBorder(
@@ -192,6 +204,7 @@ class _FeedState extends State<Feed> {
                                 op = 0;
                                 _filterDataController = TextEditingController();
                               });
+                              Navigator.pop(context);
                             },
                           ),
 
@@ -320,7 +333,7 @@ class _FeedState extends State<Feed> {
                     // Campo do ano de lançamento
                     TextField(
                       controller: _releaseDateController,
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.calendar_month),
                         labelText: "Ano de lançamento",
@@ -426,7 +439,7 @@ class _FeedState extends State<Feed> {
                   } else {
                     return Expanded(
                       child: ListView.builder(
-                        itemCount: gameList?.length,
+                        itemCount: gameList.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                             contentPadding: const EdgeInsets.all(5),
@@ -441,11 +454,11 @@ class _FeedState extends State<Feed> {
                                 Expanded(child: Text(gameList![index].name)),
 
                                 // Média
-                                Row(
+                                const Row(
                                   children: [
                                     Text(
-                                      // INSERIR MÉDIA
-                                      "${index * 1.5} ",
+                                      // TODO inserir média (tirar const da row)
+                                      "inserir média",
                                       style: const TextStyle(fontSize: 15),
                                     ),
                                     const Icon(
