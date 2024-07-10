@@ -309,6 +309,9 @@ class _FeedState extends State<Feed> {
         backgroundColor: Colors.redAccent,
         child: const Icon(Icons.sports_esports, color: Colors.white),
         onPressed: () {
+          _nameController.text = "";
+          _releaseDateController.text = "";
+          _descriptionController.text = "";
           showDialog(
             context: context,
             builder: (context) {
