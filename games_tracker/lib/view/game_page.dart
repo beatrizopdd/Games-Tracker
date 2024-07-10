@@ -3,6 +3,7 @@ import 'package:games_tracker/controller/game_controller.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
 
+import '../controller/genre_controller.dart';
 import '../controller/review_controller.dart';
 /*import 'package:games_tracker/model/genre.dart';
 import 'package:games_tracker/model/review.dart';*/
@@ -151,9 +152,15 @@ class _GamePageState extends State<GamePage> {
                           child: const Text("Editar"),
                           onPressed: () async {
                             // TODO procedimentto para atualizar o jogo
-                            /*
-                            GameController.updateGame(){};
-                            }*/
+                            //String? game_gender_name = await GameController.findGenreListfromGame(game);
+                           
+                            _newGenreController.text = await GenreController.updategenre(_newGenreController.text,game.id);//Aventura- Aventura,RPG
+                            
+                            //_newGenreController.text = genrefudido;
+                            game = await GameController.updategame(_newNameController.text, _newDescriptionController.text, _newReleaseDateController.text, game.id) as Game; 
+                            //GameController.cadastraGame(user.id, _newNameController.text, _newDescriptionController.text, _newReleaseDateController.text,_newGenreController.text);
+
+
                             Navigator.pop(context);
                           },
                         ),

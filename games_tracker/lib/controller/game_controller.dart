@@ -372,7 +372,7 @@ class GameController {
   }
 
   //dar um find depois do textfield e assim receber os campos do jogo e  botar nos campos o que estava antes  e passar para ca o que quer mudar
-  Future<Game?> updategame(
+  static Future<Game?> updategame(
       String name, String description, String release_date, int id) async {
     //para o usuario atualizar o jogo
     var database = await _db;
@@ -385,9 +385,9 @@ class GameController {
     await database!
         .update('game', updatedData, where: "id = ?", whereArgs: [id]);
 
-    Game? aux_game_genre = await findGame(name);
+    Game? aux_game = await findGameID(id);
 
-    return (aux_game_genre); //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
+    return (aux_game); //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
   }
 
   static Future<List<Game>> objetifyFiltroGenero(String name) async {

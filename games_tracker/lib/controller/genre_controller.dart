@@ -1,6 +1,7 @@
 import 'database_controller.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/genre.dart';
+import 'game_genre_controller.dart';
 
 class GenreController {
   static final String tableName = "genre";
@@ -84,7 +85,7 @@ class GenreController {
     String table = 'genre';
     List<String> columns = ['id', 'name'];
     String where = 'name LIKE ?';
-    List<dynamic> whereArgs = ['$name'];
+    List<dynamic> whereArgs = ['%$name%'];
     String? groupBy;
     String? having;
     String? orderBy;
@@ -125,7 +126,7 @@ class GenreController {
 
   static Future<int> cadastraGenre(String name) async {
     //teste
-    if (name == '') {
+    if (name == '' || name == ' ') {
       return 0;
     }
 
@@ -138,8 +139,8 @@ class GenreController {
     List<Map<String, dynamic>> result = await database.query(
       'genre',
       columns: ['id', 'name'],
-      where: 'name = ?',
-      whereArgs: [name],
+      where: 'name LIKE ?',
+      whereArgs: ['%$name%'],//'%name%
     );
 
     print('Query result: $result');
@@ -153,5 +154,28 @@ class GenreController {
     }
     
   }
+
+
+static Future<String> updategenre(String name,int game_id) async {//para o usuario atualizar o jogo
+    var database = await _db;//Aventura,Ação,RPG
+
+  Set<String> lista_generos = name.split(',').toSet();//Aventura,RPG
+  
+    for (String s in lista_generos) {
+      print("printando S $s");
+      int res_gen =
+          await GenreController.cadastraGenre(s.trim()); //vai ficar dentro do for
+      print("resgen $res_gen");
+      if(res_gen > 0){
+        int res_gen_game =
+          await Game_Genre_Controller.cadastraGame_Genre(game_id, res_gen);
+          print("resgengame $res_gen_game");
+        }
+    }
+    print(lista_generos.toString());
+    return (lista_generos.toString());//cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
+  } 
+
+
 
 }
