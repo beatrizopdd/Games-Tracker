@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:games_tracker/model/review.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
-import 'package:games_tracker/model/review.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -16,9 +16,6 @@ class _GamePageState extends State<GamePage> {
   // Para a nova review
   double _scoreController = 0;
   TextEditingController _descriptionController = TextEditingController();
-
-  // Lista de reviews
-  late List<Review> reviewList;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +48,16 @@ class _GamePageState extends State<GamePage> {
             ),
           ),
         ),
+
+        // Botão de deletar jogo
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.white),
+            onPressed: () {
+              // PROCEDIMENTO PRA APAGAR
+            },
+          ),
+        ],
       ),
 
       // Botão flutuante
@@ -62,59 +69,69 @@ class _GamePageState extends State<GamePage> {
           showDialog(
             context: context,
             builder: (context) {
-              return AlertDialog(
-                title: const Text("Adicionar review"),
-                content: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Nota"),
-                    Slider(
-                      value: _scoreController,
-                      min: 0,
-                      max: 10,
-                      divisions: 21,
-                      onChanged: (value) {
-                        _scoreController = value;
-                      },
-                    ),
-
-                    // Espaço
-                    const SizedBox(height: 15),
-
-                    // Descrição
-                    TextField(
-                      controller: _descriptionController,
-                      keyboardType: TextInputType.text,
-                      maxLength: null,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.description),
-                        labelText: "Comentários",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return AlertDialog(
+                    title: const Text("Adicionar review"),
+                    scrollable: true,
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Nota"),
+                        Slider(
+                          label: _scoreController.toString(),
+                          value: _scoreController,
+                          min: 0,
+                          max: 10,
+                          divisions: 10,
+                          onChanged: (value) {
+                            setState(() {
+                              _scoreController = value;
+                            });
+                          },
                         ),
-                      ),
+
+                        // Espaço
+                        const SizedBox(height: 10),
+
+                        // Descrição
+                        TextField(
+                          controller: _descriptionController,
+                          keyboardType: TextInputType.text,
+                          maxLength: null,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.description),
+                            labelText: "Comentário",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
 
-                // Botões
-                actions: [
-                  // Botão de envio
-                  TextButton(
-                    child: const Text("Avaliar"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+                    // Botões
+                    actions: [
+                      // Botão de envio
+                      TextButton(
+                        child: const Text("Avaliar"),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
 
-                  // Botão de cancelamento
-                  TextButton(
-                    child: const Text("Cancelar"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+                      // Botão de cancelamento
+                      TextButton(
+                        child: const Text("Cancelar"),
+                        onPressed: () {
+                          _scoreController = 0;
+                          _descriptionController = TextEditingController();
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
             },
           );
@@ -122,114 +139,87 @@ class _GamePageState extends State<GamePage> {
       ),
 
       // Corpo
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
+      body: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 15),
 
-          // Lançamento
-          Row(
-            children: [
-              const Text(
-                "LANÇAMENTO:",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(game.release_date),
-            ],
-          ),
-
-          // Média
-          const Row(
-            children: [
-              const Text(
-                "MÉDIA:",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              // INSERIR MÉDIA
-              Text("4.5"),
-              const Icon(Icons.star, size: 20, color: Colors.amber),
-            ],
-          ),
-
-          // Descrição
-          const Text(
-            "DESCRIÇÃO:",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(game.description),
-
-          // Reviews
-          Expanded(
-            child: ListView.builder(
-              itemCount: reviewList.length,
-              itemBuilder: (context, index) {
-                return Dismissible(
-                  key: Key(DateTime.now().microsecond.toString()), 
-                  
-                  // Aparência
-                  background: Container(
-                    color: Colors.blue,
-                    padding: const EdgeInsets.all(16),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [Icon(Icons.edit, color: Colors.white)],
-                    ),
+            // Lançamento
+            Row(
+              children: [
+                const Text(
+                  "LANÇAMENTO: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
                   ),
-                  secondaryBackground: Container(
-                    color: Colors.red,
-                    padding: const EdgeInsets.all(16),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [Icon(Icons.delete, color: Colors.white)],
-                    ),
-                  ),
-                  
-                  // Ações
-                  onDismissed: (direction) {
-                    // Atualizar review
-                    if (direction == DismissDirection.startToEnd) {
-  
-                    // Remover review
-                    } else if (direction == DismissDirection.endToStart) {
-                      final snackBar = SnackBar(
-                        content: const Text("Review excluída!"),
-                        duration: const Duration(seconds: 5),
-                        action: SnackBarAction(
-                          label: "Desfazer",
-                          onPressed: () {
-                            setState(() {});
-                          },
-                        ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  },
-                  
-                  // Corpo
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(5),
-
-                    // Gênero
-                    leading: const Icon(Icons.person, size: 40),
-
-                    // Nota
-                    title: Row(
-                      children: [
-                        Text(
-                          "${reviewList[index].score}",
-                          style: const TextStyle(fontSize: 15),
-                        ),
-                        const Icon(Icons.star, size: 20, color: Colors.amber),
-                      ],
-                    ),
-
-                    // Descrição
-                    subtitle: Text(reviewList[index].description),
-                  ),
-                );
-              },
+                ),
+                Text(
+                  game.release_date,
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ],
             ),
-          ),
-        ],
+
+            // Espaço
+            const SizedBox(height: 10),
+
+            // Média
+            const Row(
+              children: [
+                const Text(
+                  "MÉDIA: ",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                  ),
+                ),
+                // INSERIR MÉDIA
+                Text(
+                  "inserir média",
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const Icon(Icons.star, size: 20, color: Colors.amber),
+              ],
+            ),
+
+            // Espaço
+            const SizedBox(height: 10),
+
+            // Descrição
+            const Text(
+              "DESCRIÇÃO:",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+            ),
+
+            // Espaço
+            const SizedBox(height: 5),
+
+            Text(
+              game.description,
+              style: const TextStyle(fontSize: 16),
+            ),
+
+            // Ver reviews
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        "/reviews_page",
+                        arguments: [user, game.id],
+                      );
+                    },
+                    child: const Text("Ver reviews"),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

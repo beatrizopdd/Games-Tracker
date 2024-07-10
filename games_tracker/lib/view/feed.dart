@@ -19,8 +19,17 @@ class _FeedState extends State<Feed> {
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _genreController = TextEditingController();
 
-  // Lista de jogos
+  // Para o filtro
+  late int opBackup;
+  int _filterController = 2;
+  TextEditingController _filterDataController = TextEditingController();
 
+  // Lista de jogos:
+  // op = 0 pra lista do usuario
+  // op = 1 pra lista geral
+  // op = 2 pra lista selecionada por data
+  // op = 3 pra lista selecionada por genero
+  // op = 4 pra lista selecionada por média
   Future<List<Game>> getGames() async {
     List<Game> gameList = [];
     switch (op) {
@@ -75,44 +84,136 @@ class _FeedState extends State<Feed> {
           ),
         ),
 
-        // Filtro
+        // Filtro (ACESSA O DB)
         actions: [
           IconButton(
+            icon: const Icon(Icons.tune, color: Colors.white),
             onPressed: () {
+              opBackup = op;
               showDialog(
                 context: context,
                 builder: (context) {
-                  return AlertDialog(
-                    title: const Text("Filtro"),
-                    content: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [],
-                    ),
-                    actions: [
-                      TextButton(
-                        child: const Text("Buscar"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      TextButton(
-                        child: const Text("Cancelar"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      TextButton(
-                        child: const Text("Resetar"),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return AlertDialog(
+                        title: const Text("Filtrar por"),
+                        scrollable: true,
+                        content: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Filtro de ano
+                            RadioListTile(
+                              contentPadding: const EdgeInsets.only(left: 0),
+                              value: 2,
+                              title: const Text("Ano de lançamento"),
+                              groupValue: _filterController,
+                              onChanged: (value) {
+                                setState(() {
+                                  _filterController = value!;
+                                });
+                              },
+                            ),
+                            TextField(
+                              controller: _filterDataController,
+                              enabled: (_filterController == 2),
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.calendar_month),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+
+                            // Filtro de genero
+                            RadioListTile(
+                              contentPadding: const EdgeInsets.only(left: 0),
+                              value: 3,
+                              title: const Text("Gênero"),
+                              groupValue: _filterController,
+                              onChanged: (value) {
+                                setState(() {
+                                  _filterController = value!;
+                                });
+                              },
+                            ),
+                            TextField(
+                              controller: _filterDataController,
+                              enabled: (_filterController == 3),
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.extension),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+
+                            // Filtro de média
+                            RadioListTile(
+                              contentPadding: const EdgeInsets.only(left: 0),
+                              value: 4,
+                              title: const Text("Média"),
+                              groupValue: _filterController,
+                              onChanged: (value) {
+                                setState(() {
+                                  _filterController = value!;
+                                });
+                              },
+                            ),
+                            TextField(
+                              controller: _filterDataController,
+                              enabled: (_filterController == 4),
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.star),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Botões
+                        actions: [
+                          // Botão de envio
+                          TextButton(
+                            child: const Text("Buscar"),
+                            onPressed: () {
+                              op = _filterController;
+                              Navigator.pop(context);
+                            },
+                          ),
+
+                          // Botão de reset
+                          TextButton(
+                            child: const Text("Resetar"),
+                            onPressed: () {
+                              setState(() {
+                                _filterController = 2;
+                                op = 0;
+                                _filterDataController = TextEditingController();
+                              });
+                            },
+                          ),
+
+                          // Botão de cancelamento
+                          TextButton(
+                            child: const Text("Cancelar"),
+                            onPressed: () {
+                              setState(() {
+                                _filterController = 2;
+                                op = opBackup;
+                                _filterDataController = TextEditingController();
+                              });
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
               );
             },
-            icon: const Icon(Icons.tune, color: Colors.white),
           ),
         ],
       ),
@@ -140,29 +241,33 @@ class _FeedState extends State<Feed> {
             ),
 
             const SizedBox(height: 20),
-            
+
             //Todos os jogos
             TextButton(
               onPressed: () {
                 op = 1;
-                setState(() {
-                });
+                setState(() {});
               },
               child: const Text("Todos os jogos"),
             ),
+
             // Meus jogos
             TextButton(
               onPressed: () {
                 op = 0;
-                setState(() {
-                });
+                setState(() {});
               },
               child: const Text("Meus jogos"),
             ),
 
             // Minha reviews
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  "/reviews_page",
+                  arguments: [user, 0],
+                );
+              },
               child: const Text("Minhas reviews recentes"),
             ),
 
@@ -275,14 +380,14 @@ class _FeedState extends State<Feed> {
                       if (result == -1) {
                         _showMessage("O jogo já está cadastrado no sistema!");
                       } else {
-                      if (result != 0) {
-                        _showMessage("Cadastro do jogo realizado com sucesso!");
-                      } else {
-                      _showMessage(
-                          "Não foi possível realizar o cadastro do jogo, tente novamente.");
-                    }
-                    }
-                      // INSERE NO BANCO DE DADOS
+                        if (result != 0) {
+                          _showMessage(
+                              "Cadastro do jogo realizado com sucesso!");
+                        } else {
+                          _showMessage(
+                              "Não foi possível realizar o cadastro do jogo, tente novamente.");
+                        }
+                      }
                       Navigator.pop(context);
                     },
                   ),
@@ -315,12 +420,10 @@ class _FeedState extends State<Feed> {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  if (snapshot.hasError) {
-                    return const Center(
-                        child: Icon(
-                            Icons.signal_wifi_connected_no_internet_4_rounded));
+                  List<Game>? gameList = snapshot.data;
+                  if (gameList!.isEmpty) {
+                    return const Center(child: Icon(Icons.videogame_asset_off));
                   } else {
-                    List<Game>? gameList = snapshot.data;
                     return Expanded(
                       child: ListView.builder(
                         itemCount: gameList?.length,
