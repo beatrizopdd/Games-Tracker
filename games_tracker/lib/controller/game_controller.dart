@@ -436,4 +436,97 @@ class GameController {
 
     return games;
   }
+
+  static Future<String?> findGenreListfromGame(Game jogo) async {
+    /*
+
+    // Executando a consulta em Game para descobrir o ID do Jogo
+    
+    List<Map<String, dynamic>> game_id = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+    );*/
+
+    //Acesso ao Banco de Dados
+    var database = await _db;
+
+    //Declaração das variáveis de consulta
+    String table;
+    List<String> columns = [];
+    String where;
+    List<dynamic> whereArgs;
+
+    //Setando parametros para consulta em Game_Genre para descobrir o ID do Genre
+    table = 'game_genre';
+    columns = ['genre_id'];
+    where = 'game_id = ?';
+    whereArgs = [jogo.id];
+
+    //Executando a consulta em Game_Genre para descobrir o ID do Genre
+    List<Map<String, dynamic>> genre_id_list = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+    );
+
+    //Trocando parâmetros para consulta em Genre
+
+    table = 'genre';
+    columns = ['name'];
+    where = 'id = ?';
+    //whereArgs = [genre_id_list];
+
+    String final_result = '';
+
+    //{genre_id = 9}
+    for (var row in genre_id_list) {
+      var id = row['genre_id'];
+      whereArgs = [id];
+      List<Map<String, dynamic>> genre_name = await database!.query(
+        table,
+        columns: columns,
+        where: where,
+        whereArgs: whereArgs,
+      );
+      print('genre_name = $genre_name');
+      var name = genre_name.first['name'];
+      if (final_result == '') {
+        final_result = '$name';
+      } else {
+        final_result = '$final_result ,$name';
+      }
+      
+    }
+
+    print(final_result);
+
+    return final_result;
+    /*
+    List<Map<String, dynamic>> result;
+
+    await database.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+    );
+
+    // Verificando se a lista não está vazia antes de criar o genero
+    Genre? genre;
+    if (result.isNotEmpty) {
+      genre = Genre.fromMap(result.first);
+    }
+
+    // Imprimindo o jogo para verificar o mapeamento
+
+    if (genre != null) {
+      print('ID: ${genre.id}, Name: ${genre.name}');
+    } else {
+      print('Nenhum genre encontrado na lista.');
+    }
+    return genre;*/
+  }
 }
