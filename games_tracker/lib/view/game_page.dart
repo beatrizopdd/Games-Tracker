@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/game_controller.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
-
-import '../controller/review_controller.dart';
-/*import 'package:games_tracker/model/genre.dart';
-import 'package:games_tracker/model/review.dart';*/
+import 'package:games_tracker/controller/review_controller.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -259,7 +256,12 @@ class _GamePageState extends State<GamePage> {
                         child: const Text("Avaliar"),
                         onPressed: () {
                           ReviewController.insertReview(
-                              user.id, game.id, _descriptionController.text, _scoreController, DateTime.now().toString());//TODO Mostrar Descrição em vez de Data
+                              user.id,
+                              game.id,
+                              _descriptionController.text,
+                              _scoreController,
+                              DateTime.now()
+                                  .toString());
                           Navigator.pop(context);
                         },
                       ),

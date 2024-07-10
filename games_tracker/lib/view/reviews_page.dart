@@ -216,22 +216,14 @@ class _ReviewPageState extends State<ReviewPage> {
                               if (direction == DismissDirection.startToEnd) {
                                 updateReview(reviewList[index]);
 
-                                // Remover review
-                              } else if (direction ==
-                                  DismissDirection.endToStart) {
+                              // Remover review
+                              } else if (direction == DismissDirection.endToStart) {
                                 deleteReview(reviewList[index]);
-                                final snackBar = SnackBar(
-                                  content: const Text("Review excluída!"),
-                                  duration: const Duration(seconds: 5),
-                                  action: SnackBarAction(
-                                    label: "Desfazer",
-                                    onPressed: () {
-                                      setState(() {});
-                                    },
-                                  ),
+                                const snackBar = SnackBar(
+                                  content: Text("Review excluída!"),
+                                  duration: Duration(seconds: 5),
                                 );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
+                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                               }
                             },
 

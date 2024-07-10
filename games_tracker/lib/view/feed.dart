@@ -47,7 +47,8 @@ class _FeedState extends State<Feed> {
         gameList = await GameController.objetifyFiltroGenero(
             _filterDataController.text);
         break;
-      case 4: //TODO MEDIA
+      case 4:
+        //TODO MEDIA
         gameList = [];
         break;
       default:
@@ -60,7 +61,7 @@ class _FeedState extends State<Feed> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: Duration(seconds: 2), // Duração do SnackBar
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -101,6 +102,8 @@ class _FeedState extends State<Feed> {
             icon: const Icon(Icons.tune, color: Colors.white),
             onPressed: () {
               opBackup = op;
+              _filterController = 2;
+              _filterDataController.text = "";
               showDialog(
                 context: context,
                 builder: (context) {
@@ -127,7 +130,6 @@ class _FeedState extends State<Feed> {
                             TextField(
                               controller: _filterDataController,
                               keyboardType: TextInputType.number,
-                              onTap: () {},
                               enabled: (_filterController == 2),
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.calendar_month),
@@ -153,7 +155,6 @@ class _FeedState extends State<Feed> {
                               controller: _filterDataController,
                               keyboardType: TextInputType.text,
                               enabled: (_filterController == 3),
-                              onTap: () {},
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.extension),
                                 border: OutlineInputBorder(
@@ -206,7 +207,7 @@ class _FeedState extends State<Feed> {
                               setState(() {
                                 _filterController = 2;
                                 op = 1;
-                                _filterDataController = TextEditingController();
+                                _filterDataController.text = "";
                               });
                               Navigator.pop(context);
                             },
@@ -219,7 +220,7 @@ class _FeedState extends State<Feed> {
                               setState(() {
                                 _filterController = 2;
                                 op = opBackup;
-                                _filterDataController = TextEditingController();
+                                _filterDataController.text = "";
                               });
                               Navigator.pop(context);
                             },
@@ -413,9 +414,9 @@ class _FeedState extends State<Feed> {
                   TextButton(
                     child: const Text("Cancelar"),
                     onPressed: () {
-                      _nameController = TextEditingController();
-                      _releaseDateController = TextEditingController();
-                      _descriptionController = TextEditingController();
+                      _nameController.text = "";
+                      _releaseDateController.text = "";
+                      _descriptionController.text = "";
                       Navigator.pop(context);
                     },
                   ),

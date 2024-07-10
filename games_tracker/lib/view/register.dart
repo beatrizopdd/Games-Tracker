@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/user_controller.dart';
 import 'package:games_tracker/view/login.dart';
-/*import 'package:games_tracker/controller/genre_controller.dart';
-import 'package:games_tracker/controller/game_genre_controller.dart';
-import 'package:games_tracker/controller/game_controller.dart';*/
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key? key}) : super(key: key);
-
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -23,7 +19,8 @@ class _RegisterPageState extends State<RegisterPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: Duration(seconds: 2), // Duração do SnackBar
+        // Duração do SnackBar
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -79,19 +76,21 @@ class _RegisterPageState extends State<RegisterPage> {
               TextField(
                 obscureText: !isVisible,
                 decoration: InputDecoration(
-                  //icon: Icon(Icons.lock),
                   labelText: 'Senha',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   prefixIcon: const Icon(Icons.lock),
-                  suffixIcon: IconButton(onPressed: ()
-                  {setState(() {
-                    isVisible = !isVisible;
-                  });
-                },icon:Icon(isVisible? Icons.visibility:Icons.visibility_off))
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isVisible = !isVisible;
+                      });
+                    },
+                    icon: Icon(
+                        isVisible ? Icons.visibility : Icons.visibility_off),
+                  ),
                 ),
-                
                 controller: _senhaController,
               ),
 
@@ -105,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  backgroundColor: Color(0x00000000),
+                  backgroundColor: const Color(0x00000000),
                 ),
                 onPressed: () async {
                   int final_result = await UserController.cadastraUser(
@@ -130,12 +129,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                   }
                   //APAGR ISSO TUDO!!! ISSO SÃO SÓ TESTES
-                 
                   //GameController.filtrodata(false);
-                
                 },
-                child: const Text('Cadastrar',
-                    style: TextStyle(color: Colors.black26)),
+                child: const Text(
+                  'Cadastrar',
+                  style: TextStyle(color: Colors.black26),
+                ),
               ),
             ],
           ),
