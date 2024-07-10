@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/database_controller.dart';
-import 'package:games_tracker/controller/game_controller.dart';
 import 'package:games_tracker/controller/review_controller.dart';
-import 'package:games_tracker/controller/user_controller.dart';
 import 'register.dart';
 import 'login.dart';
 
@@ -115,8 +113,8 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                     ),
                     onPressed: () async {
-                      await DatabaseController
-                          .db; // Certifique-se de que o banco de dados está inicializado
+                      await DatabaseController.db; 
+                      // Certifique-se de que o banco de dados está inicializado
                       // Imprima o conteúdo de outras tabelas conforme necessário
                       print('User:');
                       await DatabaseController.printTable('user');
@@ -140,8 +138,8 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                     ),
                     onPressed: () async {
-                      await DatabaseController
-                          .db; // Certifique-se de que o banco de dados está inicializado
+                      await DatabaseController.db; 
+                      // Certifique-se de que o banco de dados está inicializado
                       // Teste o conteúdo de outras tabelas conforme necessário
                       //ReviewController.insertReview(
                       //1, 20, 'Maguinifique!', 9.71, '2021');
@@ -149,6 +147,7 @@ class _HomeState extends State<Home> {
                       //ReviewController.findReview(1, 1);
                       //ReviewController.objetifyTableReviewbyGame(2);
                       //ReviewController.objetifyTableReviewbyUser(1);
+                      ReviewController.mediaByGame(2);
                     },
                     child: const Text(
                       'Testa Banco de Dados',

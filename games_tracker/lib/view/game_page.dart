@@ -266,7 +266,12 @@ class _GamePageState extends State<GamePage> {
                         child: const Text("Avaliar"),
                         onPressed: () {
                           ReviewController.insertReview(
-                              user.id, game.id, _descriptionController.text, _scoreController, DateTime.now().toString());//TODO Mostrar Descrição em vez de Data
+                              user.id,
+                              game.id,
+                              _descriptionController.text,
+                              _scoreController,
+                              DateTime.now()
+                                  .toString());
                           Navigator.pop(context);
                         },
                       ),
@@ -328,8 +333,7 @@ class _GamePageState extends State<GamePage> {
                   ),
                 ),
                 Text(
-                  // TODO inserir média (tirar const da row)
-                  "inserir média",
+                  'Oi', //TODO pegar Media do Jogo
                   style: const TextStyle(fontSize: 16),
                 ),
                 const Icon(Icons.star, size: 20, color: Colors.amber),

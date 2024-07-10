@@ -4,7 +4,6 @@ import 'package:games_tracker/model/user.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -88,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  backgroundColor: Color(0x00000000),
+                  backgroundColor: const Color(0x00000000),
                 ),
                 onPressed: () async {
                   User? user;

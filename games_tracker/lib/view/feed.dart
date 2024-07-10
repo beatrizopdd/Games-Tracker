@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/game_controller.dart';
+import 'package:games_tracker/controller/review_controller.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
 
@@ -30,6 +31,11 @@ class _FeedState extends State<Feed> {
   // op = 2 pra lista selecionada por data
   // op = 3 pra lista selecionada por genero
   // op = 4 pra lista selecionada por média
+
+  //Para as médias
+
+  List<String?>? avgs = [];
+
   Future<List<Game>> getGames() async {
     List<Game> gameList = [];
     switch (op) {
@@ -47,11 +53,18 @@ class _FeedState extends State<Feed> {
         gameList = await GameController.objetifyFiltroGenero(
             _filterDataController.text);
         break;
-      case 4: //TODO MEDIA
+      case 4:
+        //TODO MEDIA
         gameList = [];
         break;
       default:
         break;
+    }
+    for (var game in gameList) {
+      print('Teste for');
+      String media;
+      media = ReviewController.mediaByGame(game.id) as String;
+      print('Teste mediaByGame');
     }
     return gameList;
   }
@@ -60,7 +73,7 @@ class _FeedState extends State<Feed> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        duration: Duration(seconds: 2), // Duração do SnackBar
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -101,6 +114,8 @@ class _FeedState extends State<Feed> {
             icon: const Icon(Icons.tune, color: Colors.white),
             onPressed: () {
               opBackup = op;
+              _filterController = 2;
+              _filterDataController.text = "";
               showDialog(
                 context: context,
                 builder: (context) {
@@ -127,7 +142,6 @@ class _FeedState extends State<Feed> {
                             TextField(
                               controller: _filterDataController,
                               keyboardType: TextInputType.number,
-                              onTap: () {},
                               enabled: (_filterController == 2),
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.calendar_month),
@@ -153,7 +167,6 @@ class _FeedState extends State<Feed> {
                               controller: _filterDataController,
                               keyboardType: TextInputType.text,
                               enabled: (_filterController == 3),
-                              onTap: () {},
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.extension),
                                 border: OutlineInputBorder(
@@ -206,7 +219,7 @@ class _FeedState extends State<Feed> {
                               setState(() {
                                 _filterController = 2;
                                 op = 1;
-                                _filterDataController = TextEditingController();
+                                _filterDataController.text = "";
                               });
                               Navigator.pop(context);
                             },
@@ -219,7 +232,7 @@ class _FeedState extends State<Feed> {
                               setState(() {
                                 _filterController = 2;
                                 op = opBackup;
-                                _filterDataController = TextEditingController();
+                                _filterDataController.text = "";
                               });
                               Navigator.pop(context);
                             },
@@ -308,6 +321,9 @@ class _FeedState extends State<Feed> {
         backgroundColor: Colors.redAccent,
         child: const Icon(Icons.sports_esports, color: Colors.white),
         onPressed: () {
+          _nameController.text = "";
+          _releaseDateController.text = "";
+          _descriptionController.text = "";
           showDialog(
             context: context,
             builder: (context) {
@@ -413,9 +429,9 @@ class _FeedState extends State<Feed> {
                   TextButton(
                     child: const Text("Cancelar"),
                     onPressed: () {
-                      _nameController = TextEditingController();
-                      _releaseDateController = TextEditingController();
-                      _descriptionController = TextEditingController();
+                      _nameController.text = "";
+                      _releaseDateController.text = "";
+                      _descriptionController.text = "";
                       Navigator.pop(context);
                     },
                   ),
