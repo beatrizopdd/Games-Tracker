@@ -40,7 +40,7 @@ class Game_Genre_Controller {
   }
   
   //ajeitar para problemas de delete
-  Future<int> delete_game_genre(int game_id,int genre_id) async {
+  static Future<int> delete_game_genre(int game_id,int genre_id) async {
     var database = db;
 
     int result =

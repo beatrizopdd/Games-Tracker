@@ -11,7 +11,7 @@ class Review {
   // FOREIGN KEY(game_id) REFERENCES game(id)
 
 
-  Review(this.id,this.game_id,this.user_id, this.score, this.description,this.date);
+  Review(this.id,this.game_id,this.user_id, this.score, this.date, this.description);
 
     factory Review.fromMap(Map<String, dynamic> map) {    
       return Review(

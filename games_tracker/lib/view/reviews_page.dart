@@ -90,7 +90,7 @@ class _ReviewPageState extends State<ReviewPage> {
                   TextButton(
                     child: const Text("Editar"),
                     onPressed: () {
-                      // TODO procedimento de atualizar jogo
+                      // TODO procedimento de atualizar review
                       Navigator.pop(context);
                     },
                   ),
@@ -123,7 +123,7 @@ class _ReviewPageState extends State<ReviewPage> {
   // Deletar review
   void deleteReview(Review review) {
     if (review.user_id == user.id) {
-      // TODO PROCEDIMENTO PRA DELETAR REVIEW
+      ReviewController.deleteReviewbyId(review.id);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

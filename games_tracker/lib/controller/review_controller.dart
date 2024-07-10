@@ -78,21 +78,21 @@ class ReviewController {
     return id;
   }
 
-  Future<int> deleteReviewbyId(int id) async {
+  static Future<int> deleteReviewbyId(int id) async {
     var database = db;
     int result =
         await database!.delete(tableName, where: "id = ?", whereArgs: [id]);
     return result;
   }
 
-  Future<int> deleteReviewbyGame(int game_id) async {
+  static Future<int> deleteReviewbyGame(int game_id) async {
     var database = db;
     int result =
         await database!.delete(tableName, where: "game_id = ?", whereArgs: [game_id]);
     return result;
   }
 
-  Future<int> deleteReviewbyUser(int user_id) async {
+  static Future<int> deleteReviewbyUser(int user_id) async {
     var database = db;
     int result =
         await database!.delete(tableName, where: "user_id = ?", whereArgs: [user_id]);
@@ -201,7 +201,7 @@ class ReviewController {
     return reviews; // Retorna a lista de reviews
   }
 
-  
+
 
 
   /*

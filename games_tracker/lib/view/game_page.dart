@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/game_controller.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
+
+import '../controller/review_controller.dart';
 /*import 'package:games_tracker/model/genre.dart';
 import 'package:games_tracker/model/review.dart';*/
 
@@ -24,8 +26,6 @@ class _GamePageState extends State<GamePage> {
   // Para a nova review
   double _scoreController = 0;
   TextEditingController _descriptionController = TextEditingController();
-
-  // TODO um get genero
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,8 @@ class _GamePageState extends State<GamePage> {
             icon: const Icon(Icons.edit, color: Colors.white),
             onPressed: () async {
               if (game.user_id == user.id) {
-                String? game_gender_name = await GameController.findGenreListfromGame(game);
+                String? game_gender_name =
+                    await GameController.findGenreListfromGame(game);
                 _newNameController.text = game.name;
                 _newReleaseDateController.text = game.release_date;
                 _newDescriptionController.text = game.description;
@@ -151,24 +152,7 @@ class _GamePageState extends State<GamePage> {
                           onPressed: () async {
                             // TODO procedimentto para atualizar o jogo
                             /*
-                            int result = await GameController.cadastraGame(
-                                user.id,
-                                _nameController.text,
-                                _descriptionController.text,
-                                _releaseDateController.text,
-                                _genreController.text);
-
-                            if (result == -1) {
-                              _showMessage(
-                                  "O jogo já está cadastrado no sistema!");
-                            } else {
-                              if (result != 0) {
-                                _showMessage(
-                                    "Cadastro do jogo realizado com sucesso!");
-                              } else {
-                                _showMessage(
-                                    "Não foi possível realizar o cadastro do jogo, tente novamente.");
-                              }
+                            GameController.updateGame(){};
                             }*/
                             Navigator.pop(context);
                           },
@@ -181,7 +165,7 @@ class _GamePageState extends State<GamePage> {
                             _newNameController.text = game.name;
                             _newReleaseDateController.text = game.release_date;
                             _newDescriptionController.text = game.description;
-                            _newGenreController.text = game_gender_name; //HAVIA UM TODO AQUI, OLHAR QUESTÃO DA PERSISTENCIA DO TEXTO
+                            _newGenreController.text = game_gender_name;
                             Navigator.pop(context);
                           },
                         ),
@@ -201,9 +185,10 @@ class _GamePageState extends State<GamePage> {
           ),
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.white),
-            onPressed: () {
+            onPressed: () async {
               if (game.user_id == user.id) {
-                // TODO procedimentto para deletar o jogo
+                await GameController.deleteGame(game.name);
+                Navigator.of(context).pop();
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -273,6 +258,8 @@ class _GamePageState extends State<GamePage> {
                       TextButton(
                         child: const Text("Avaliar"),
                         onPressed: () {
+                          ReviewController.insertReview(
+                              user.id, game.id, _descriptionController.text, _scoreController, DateTime.now().toString());//TODO Mostrar Descrição em vez de Data
                           Navigator.pop(context);
                         },
                       ),

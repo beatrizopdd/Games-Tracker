@@ -1,3 +1,5 @@
+import 'package:games_tracker/controller/review_controller.dart';
+
 import 'database_controller.dart';
 
 import 'package:sqflite/sqflite.dart';
@@ -6,8 +8,6 @@ import '../controller/game_genre_controller.dart';
 
 import '../model/game.dart';
 import '../model/genre.dart';
-
-
 
 class GameController {
   static final String tableName = "game";
@@ -36,27 +36,34 @@ class GameController {
   }
 
   static Future<int> insertGame(int user_id, String name, String description,
-      String release_date, String genre) async {//List<String> - for para verificação 
+      String release_date, String genre) async {
+    //List<String> - for para verificação
     var database = await _db;
 
-    int result = await database!
-        .insert('game', {'user_id': user_id,'name': name, 'description': description, 'release_date': release_date});
+    int result = await database!.insert('game', {
+      'user_id': user_id,
+      'name': name,
+      'description': description,
+      'release_date': release_date
+    });
 
     List<String> lista_generos = genre.split(',');
 
-    for(String s in lista_generos){
+    for (String s in lista_generos) {
       print("printando S $s");
-      int res_gen = await GenreController.cadastraGenre(s);//vai ficar dentro do for
+      int res_gen =
+          await GenreController.cadastraGenre(s); //vai ficar dentro do for
       print("resgen $res_gen");
-      int res_gen_game = await Game_Genre_Controller.cadastraGame_Genre(result,res_gen);
+      int res_gen_game =
+          await Game_Genre_Controller.cadastraGame_Genre(result, res_gen);
       print("resgengame $res_gen_game");
     }
 
     //int res_gen = await GenreController.cadastraGenre(genre);//vai ficar dentro do for
     //if(result > 0 && res_gen >0){//sla
-      //int res_gen_game = Game_Genre_Controller.cadastraGame_Genre(result,res_gen);//vai ficar dentro do for
-      //res_gen_game vai retornar se conseguiu inserir ou não, -1 NÃO INSERIU, >0 INSERIU(caso precise);
-    //}    
+    //int res_gen_game = Game_Genre_Controller.cadastraGame_Genre(result,res_gen);//vai ficar dentro do for
+    //res_gen_game vai retornar se conseguiu inserir ou não, -1 NÃO INSERIU, >0 INSERIU(caso precise);
+    //}
     //mandar id do game pra genre_game e o id do genre pra la também, o res_gen e o result geram os ids
 
     print(result);
@@ -65,16 +72,16 @@ class GameController {
 
   static Future<int> deleteGame(String name) async {
     var database = await _db;
-    
+
     //Game? game;
-    Game? aux_game_genre  = await findGame(name);
-    
-    
-    /*int game_genre_result =*/await database!.delete('game_genre',where: "game_id = ?", whereArgs: [aux_game_genre!.id]);
+    Game? aux_game_genre = await findGame(name);
+    ReviewController.deleteReviewbyGame(aux_game_genre!.id);
+
+    /*int game_genre_result =*/ await database!.delete('game_genre',
+        where: "game_id = ?", whereArgs: [aux_game_genre.id]);
 
     int result =
         await database.delete(tableName, where: "name = ?", whereArgs: [name]);
-
 
     return result;
   }
@@ -117,6 +124,7 @@ class GameController {
     }
     return game;
   }
+
   static Future<Game?> findGameID(int id) async {
     String table = 'game';
     List<String> columns = [
@@ -212,7 +220,7 @@ class GameController {
 
     if (user_id == null) {
       result = await database!.query('game');
-    }else {
+    } else {
       // Definindo os parâmetros para a consulta
       String table = 'game';
       List<String> columns = [
@@ -227,15 +235,10 @@ class GameController {
 
       // Executando a consulta
       var database = await _db;
-      result = await database!.query(
-      table,
-      columns: columns,
-      where: where,
-      whereArgs: whereArgs
-    );
-      
+      result = await database!
+          .query(table, columns: columns, where: where, whereArgs: whereArgs);
     }
-    
+
     // Apenas para depuração
     print("\n" * 5);
     for (var row in result) {
@@ -255,11 +258,11 @@ class GameController {
 
     return games; // Retorna a lista de jogos
   }
- 
+
   //filtro data crescente e decrescente
   //filtro notas
   static Future<List<Game>> objetifyFiltroData(String release_date) async {
-  /*  if (name == '' ||
+    /*  if (name == '' ||
         description == '' ||
         release_date == '' ||
         genre == '' ||
@@ -276,70 +279,13 @@ class GameController {
       'description',
       'release_date'
     ];
-      String where = 'release_date LIKE ?';
-      List<dynamic> whereArgs = ['%$release_date%'];
-      String? groupBy;
-      String? having;
-      String? orderBy;//ordenação 
-      int? limit;
-      int? offset;
-
-    // Executando a consulta 
-    var database = await _db;
-    List<Map<String, dynamic>> result = await database!.query(
-      table,
-      columns: columns,
-      where: where,
-      whereArgs: whereArgs,
-      groupBy: groupBy,
-      having: having,
-      orderBy: orderBy, 
-      limit: limit,
-      offset: offset,
-    );
-    //ESTOU COMENDO 
-
-    List<Game> games = []; // Inicializa a lista de jogos
-    for (var game in result) {
-      Game value = Game.fromMap(game);
-      games.add(value);
-    }
-
-    for (var game in games) {
-      print(game.name);
-    }
-
-    return games;
-  }
-
-
-  //FAZER DEPOIS DO REVIEW
-  static Future<List<Game>> filtronota(bool order) async {//????
-  /*  if (name == '' ||
-        description == '' ||
-        release_date == '' ||
-        genre == '' ||
-        user_id < 1) {
-      return 0;
-    } */
-
-    // Definindo os parâmetros para a consulta
-    String table = 'game';
-    List<String> columns = [
-      'id',
-      'user_id',
-      'name',
-      'description',
-      'release_date'
-    ];
-      String where = 'name LIKE ?';
-      List<dynamic>? whereArgs;
-      String? groupBy;
-      String? having;
-      String? orderBy ;//ordenação 
-      int? limit;
-      int? offset;
-
+    String where = 'release_date LIKE ?';
+    List<dynamic> whereArgs = ['%$release_date%'];
+    String? groupBy;
+    String? having;
+    String? orderBy; //ordenação
+    int? limit;
+    int? offset;
 
     // Executando a consulta
     var database = await _db;
@@ -350,11 +296,11 @@ class GameController {
       whereArgs: whereArgs,
       groupBy: groupBy,
       having: having,
-      orderBy: orderBy, 
+      orderBy: orderBy,
       limit: limit,
       offset: offset,
     );
-    //ESTOU COMENDO 
+    //ESTOU COMENDO
 
     List<Game> games = []; // Inicializa a lista de jogos
     for (var game in result) {
@@ -369,26 +315,10 @@ class GameController {
     return games;
   }
 
-
-  //dar um find depois do textfield e assim receber os campos do jogo e  botar nos campos o que estava antes  e passar para ca o que quer mudar
-  Future<Game?> updategame(String name,String description,String release_date,int id) async {//para o usuario atualizar o jogo
-    var database = await _db;
-    Map<String, dynamic> updatedData = {
-    'description': description,
-    'release_date': release_date,
-    'name': name
-  };
-    //int result =
-        await database!.update('game',updatedData, where: "id = ?", whereArgs: [id]);
- 
-    Game? aux_game_genre  = await findGame(name);
-    
-    return (aux_game_genre);//cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
-  }
-
-
-  static Future<List<Game>> objetifyFiltroGenero(String name) async {//name == nome do genero
-  /*  if (name == '' ||
+  //FAZER DEPOIS DO REVIEW
+  static Future<List<Game>> filtronota(bool order) async {
+    //????
+    /*  if (name == '' ||
         description == '' ||
         release_date == '' ||
         genre == '' ||
@@ -397,22 +327,23 @@ class GameController {
     } */
 
     // Definindo os parâmetros para a consulta
-    Genre? aux_game_genre  = await GenreController.findGenre(name);
-    //teste
-    String table = 'game_genre';
+    String table = 'game';
     List<String> columns = [
-      'game_id',
-      'genre_id',
+      'id',
+      'user_id',
+      'name',
+      'description',
+      'release_date'
     ];
-      String where = 'genre_id LIKE ?';
-      List<dynamic> whereArgs = [aux_game_genre!.id];
-      String? groupBy;
-      String? having;
-      String? orderBy;
-      int? limit;
-      int? offset;
+    String where = 'name LIKE ?';
+    List<dynamic>? whereArgs;
+    String? groupBy;
+    String? having;
+    String? orderBy; //ordenação
+    int? limit;
+    int? offset;
 
-    // Executando a consulta 
+    // Executando a consulta
     var database = await _db;
     List<Map<String, dynamic>> result = await database!.query(
       table,
@@ -421,7 +352,80 @@ class GameController {
       whereArgs: whereArgs,
       groupBy: groupBy,
       having: having,
-      orderBy: orderBy, 
+      orderBy: orderBy,
+      limit: limit,
+      offset: offset,
+    );
+    //ESTOU COMENDO
+
+    List<Game> games = []; // Inicializa a lista de jogos
+    for (var game in result) {
+      Game value = Game.fromMap(game);
+      games.add(value);
+    }
+
+    for (var game in games) {
+      print(game.name);
+    }
+
+    return games;
+  }
+
+  //dar um find depois do textfield e assim receber os campos do jogo e  botar nos campos o que estava antes  e passar para ca o que quer mudar
+  Future<Game?> updategame(
+      String name, String description, String release_date, int id) async {
+    //para o usuario atualizar o jogo
+    var database = await _db;
+    Map<String, dynamic> updatedData = {
+      'description': description,
+      'release_date': release_date,
+      'name': name
+    };
+    //int result =
+    await database!
+        .update('game', updatedData, where: "id = ?", whereArgs: [id]);
+
+    Game? aux_game_genre = await findGame(name);
+
+    return (aux_game_genre); //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
+  }
+
+  static Future<List<Game>> objetifyFiltroGenero(String name) async {
+    //name == nome do genero
+    /*  if (name == '' ||
+        description == '' ||
+        release_date == '' ||
+        genre == '' ||
+        user_id < 1) {
+      return 0;
+    } */
+
+    // Definindo os parâmetros para a consulta
+    Genre? aux_game_genre = await GenreController.findGenre(name);
+    //teste
+    String table = 'game_genre';
+    List<String> columns = [
+      'game_id',
+      'genre_id',
+    ];
+    String where = 'genre_id LIKE ?';
+    List<dynamic> whereArgs = [aux_game_genre!.id];
+    String? groupBy;
+    String? having;
+    String? orderBy;
+    int? limit;
+    int? offset;
+
+    // Executando a consulta
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
       limit: limit,
       offset: offset,
     );
@@ -429,7 +433,7 @@ class GameController {
     List<Game> games = [];
     for (var row in result) {
       var gameId = row['game_id'];
-      Game? aux  =  await findGameID(gameId);
+      Game? aux = await findGameID(gameId);
       games.add(aux!);
       print('Game ID: $gameId');
     }
@@ -498,7 +502,6 @@ class GameController {
       } else {
         final_result = '$final_result ,$name';
       }
-      
     }
 
     print(final_result);

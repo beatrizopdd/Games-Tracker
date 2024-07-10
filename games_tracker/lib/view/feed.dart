@@ -42,12 +42,13 @@ class _FeedState extends State<Feed> {
       case 2:
         gameList =
             await GameController.objetifyFiltroData(_filterDataController.text);
-        //TODO COLOCAR PARAMETRO CORRETO E (JÁ DESCOBRI COMO USAR LIKE OU USAR METODO  DE BUSCA DE SUBSTRING, ass FRED)
         break;
       case 3:
         gameList = await GameController.objetifyFiltroGenero(
             _filterDataController.text);
-        //TODO VER PARAMETRO BEA
+        break;
+      case 4: //TODO MEDIA
+        gameList = [];
         break;
       default:
         break;
@@ -94,7 +95,7 @@ class _FeedState extends State<Feed> {
           ),
         ),
 
-        // TODO Filtro
+        // TODO Filtro e Limpeza de Campos
         actions: [
           IconButton(
             icon: const Icon(Icons.tune, color: Colors.white),
@@ -177,9 +178,6 @@ class _FeedState extends State<Feed> {
                               controller: _filterDataController,
                               keyboardType: TextInputType.number,
                               enabled: (_filterController == 4),
-                              onTap: () {
-                                _filterDataController = TextEditingController();
-                              },
                               decoration: InputDecoration(
                                 prefixIcon: const Icon(Icons.star),
                                 border: OutlineInputBorder(
@@ -207,7 +205,7 @@ class _FeedState extends State<Feed> {
                             onPressed: () {
                               setState(() {
                                 _filterController = 2;
-                                op = 0;
+                                op = 1;
                                 _filterDataController = TextEditingController();
                               });
                               Navigator.pop(context);
