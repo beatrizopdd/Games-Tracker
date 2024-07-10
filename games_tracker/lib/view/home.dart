@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/database_controller.dart';
+import 'package:games_tracker/controller/review_controller.dart';
 import 'register.dart';
 import 'login.dart';
 
@@ -146,6 +147,7 @@ class _HomeState extends State<Home> {
                       //ReviewController.findReview(1, 1);
                       //ReviewController.objetifyTableReviewbyGame(2);
                       //ReviewController.objetifyTableReviewbyUser(1);
+                      ReviewController.mediaByGame(2);
                     },
                     child: const Text(
                       'Testa Banco de Dados',

@@ -323,8 +323,7 @@ class _GamePageState extends State<GamePage> {
                   ),
                 ),
                 Text(
-                  // TODO inserir média (tirar const da row)
-                  "inserir média",
+                  'Oi', //TODO pegar Media do Jogo
                   style: const TextStyle(fontSize: 16),
                 ),
                 const Icon(Icons.star, size: 20, color: Colors.amber),

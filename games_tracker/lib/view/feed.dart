@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/game_controller.dart';
+import 'package:games_tracker/controller/review_controller.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
 
@@ -30,6 +31,11 @@ class _FeedState extends State<Feed> {
   // op = 2 pra lista selecionada por data
   // op = 3 pra lista selecionada por genero
   // op = 4 pra lista selecionada por média
+
+  //Para as médias
+
+  List<String?>? avgs = [];
+
   Future<List<Game>> getGames() async {
     List<Game> gameList = [];
     switch (op) {
@@ -53,6 +59,12 @@ class _FeedState extends State<Feed> {
         break;
       default:
         break;
+    }
+    for (var game in gameList) {
+      print('Teste for');
+      String media;
+      media = ReviewController.mediaByGame(game.id) as String;
+      print('Teste mediaByGame');
     }
     return gameList;
   }

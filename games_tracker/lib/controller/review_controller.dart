@@ -69,11 +69,17 @@ class ReviewController {
     return review;
   }
 
-
-  static Future<int> insertReview(int user_id,int game_id,String description,double score,String date) async {
+  static Future<int> insertReview(int user_id, int game_id, String description,
+      double score, String date) async {
     var database = await _db;
-        
-    int id = await database!.insert(tableName,{'user_id' : user_id,'game_id':game_id,'description':description,'score': score,'date':date });
+
+    int id = await database!.insert(tableName, {
+      'user_id': user_id,
+      'game_id': game_id,
+      'description': description,
+      'score': score,
+      'date': date
+    });
 
     return id;
   }
@@ -87,15 +93,15 @@ class ReviewController {
 
   static Future<int> deleteReviewbyGame(int game_id) async {
     var database = db;
-    int result =
-        await database!.delete(tableName, where: "game_id = ?", whereArgs: [game_id]);
+    int result = await database!
+        .delete(tableName, where: "game_id = ?", whereArgs: [game_id]);
     return result;
   }
 
   static Future<int> deleteReviewbyUser(int user_id) async {
     var database = db;
-    int result =
-        await database!.delete(tableName, where: "user_id = ?", whereArgs: [user_id]);
+    int result = await database!
+        .delete(tableName, where: "user_id = ?", whereArgs: [user_id]);
     return result;
   }
 
@@ -105,7 +111,7 @@ class ReviewController {
 
     if (user_id == null) {
       result = await database!.query('review');
-    }else {
+    } else {
       // Definindo os parâmetros para a consulta
       String table = 'review';
       List<String> columns = [
@@ -121,15 +127,10 @@ class ReviewController {
 
       // Executando a consulta
       var database = await _db;
-      result = await database!.query(
-      table,
-      columns: columns,
-      where: where,
-      whereArgs: whereArgs
-    );
-      
+      result = await database!
+          .query(table, columns: columns, where: where, whereArgs: whereArgs);
     }
-    
+
     // Apenas para depuração
     print("\n" * 5);
     for (var row in result) {
@@ -156,7 +157,7 @@ class ReviewController {
 
     if (game_id == null) {
       result = await database!.query('review');
-    }else {
+    } else {
       // Definindo os parâmetros para a consulta
       String table = 'review';
       List<String> columns = [
@@ -172,15 +173,10 @@ class ReviewController {
 
       // Executando a consulta
       var database = await _db;
-      result = await database!.query(
-      table,
-      columns: columns,
-      where: where,
-      whereArgs: whereArgs
-    );
-      
+      result = await database!
+          .query(table, columns: columns, where: where, whereArgs: whereArgs);
     }
-    
+
     // Apenas para depuração
     print("\n" * 5);
     for (var row in result) {
@@ -201,8 +197,28 @@ class ReviewController {
     return reviews; // Retorna a lista de reviews
   }
 
+  static Future<String?> mediaByGame(int game_id) async {
+    var database = await _db;
+    List<Map<String, dynamic>> result = [];
 
-
+    if (game_id == null) {
+      result = await database!
+          .rawQuery('SELECT AVG(score) as avg_score FROM review');
+    } else {
+      result = await database!.rawQuery(
+          'SELECT AVG(score) as avg_score FROM review WHERE game_id = ?',
+          [game_id]);
+    }
+    String avg;
+    if (result.isEmpty) return 'Sem avaliações';
+    if (result.first['avg_score'] == null) {
+      return 'Sem Avaliações!';
+    }
+    avg = result.first['avg_score'];
+    print('game_id = $game_id');
+    print('avg = $avg');
+    return avg;
+  }
 
   /*
 
