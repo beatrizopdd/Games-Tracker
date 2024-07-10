@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:games_tracker/controller/game_controller.dart';
+import 'package:games_tracker/model/genre.dart';
 import 'package:games_tracker/model/review.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
@@ -61,13 +63,13 @@ class _GamePageState extends State<GamePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.white),
-            onPressed: () {
-              _newNameController.text = game.name;
-              _newReleaseDateController.text = game.release_date;
-              _newDescriptionController.text = game.description;
-              _newGenreController.text = "TODO INSERIR GENERO";
-
+            onPressed: () async {
               if (game.user_id == user.id) {
+                String? game_gender_name = await GameController.findGenreListfromGame(game);
+                _newNameController.text = game.name;
+                _newReleaseDateController.text = game.release_date;
+                _newDescriptionController.text = game.description;
+                _newGenreController.text = game_gender_name!;
                 showDialog(
                   context: context,
                   builder: (context) {
@@ -179,7 +181,7 @@ class _GamePageState extends State<GamePage> {
                             _newNameController.text = game.name;
                             _newReleaseDateController.text = game.release_date;
                             _newDescriptionController.text = game.description;
-                            _newGenreController.text = "TODO INSERIR GENERO";
+                            _newGenreController.text = game_gender_name; //HAVIA UM TODO AQUI MAS ACREDITO QUE JÁ RESOLVI
                             Navigator.pop(context);
                           },
                         ),
