@@ -73,7 +73,7 @@ class _GamePageState extends State<GamePage> {
                   builder: (context) {
                     return AlertDialog(
                       scrollable: true,
-                      title: const Text("Atualizar jogo"),
+                      title: const Text("Editar jogo"),
 
                       // Campos para preenchimento
                       content: Column(

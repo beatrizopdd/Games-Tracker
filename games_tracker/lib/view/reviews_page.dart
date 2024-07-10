@@ -35,83 +35,102 @@ class _ReviewPageState extends State<ReviewPage> {
 
   // Atualizar review
   void updateReview(Review review) {
-    _newScoreController = review.score;
-    _newDescriptionController.text = review.description;
-    showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: const Text("Adicionar review"),
-              scrollable: true,
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text("Nota"),
-                  Slider(
-                    label: _newScoreController.toString(),
-                    value: _newScoreController,
-                    min: 0,
-                    max: 10,
-                    divisions: 10,
-                    onChanged: (value) {
-                      setState(() {
-                        _newScoreController = value;
-                      });
+    if (review.user_id == user.id) {
+      _newScoreController = review.score;
+      _newDescriptionController.text = review.description;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: const Text("Editar review"),
+                scrollable: true,
+                content: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text("Nota"),
+                    Slider(
+                      label: _newScoreController.toString(),
+                      value: _newScoreController,
+                      min: 0,
+                      max: 10,
+                      divisions: 10,
+                      onChanged: (value) {
+                        setState(() {
+                          _newScoreController = value;
+                        });
+                      },
+                    ),
+
+                    // Espaço
+                    const SizedBox(height: 10),
+
+                    // Descrição
+                    TextField(
+                      controller: _newDescriptionController,
+                      keyboardType: TextInputType.text,
+                      maxLines: null,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(Icons.description),
+                        labelText: "Comentário",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Botões
+                actions: [
+                  // Botão de envio
+                  TextButton(
+                    child: const Text("Editar"),
+                    onPressed: () {
+                      // TODO procedimento de atualizar jogo
+                      Navigator.pop(context);
                     },
                   ),
 
-                  // Espaço
-                  const SizedBox(height: 10),
-
-                  // Descrição
-                  TextField(
-                    controller: _newDescriptionController,
-                    keyboardType: TextInputType.text,
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.description),
-                      labelText: "Comentário",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                  // Botão de cancelamento
+                  TextButton(
+                    child: const Text("Cancelar"),
+                    onPressed: () {
+                      _newScoreController = review.score;
+                      _newDescriptionController.text = review.description;
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
-              ),
+              );
+            },
+          );
+        },
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Você não pode editar esta review!"),
+          duration: Duration(seconds: 2), // Duração do SnackBar
+        ),
+      );
+    }
 
-              // Botões
-              actions: [
-                // Botão de envio
-                TextButton(
-                  child: const Text("Atualizar"),
-                  onPressed: () {
-                    // TODO procedimento de atualizar jogo
-                    Navigator.pop(context);
-                  },
-                ),
-
-                // Botão de cancelamento
-                TextButton(
-                  child: const Text("Cancelar"),
-                  onPressed: () {
-                    _newScoreController = review.score;
-                    _newDescriptionController.text = review.description;
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
   }
 
   // Deletar review
   void deleteReview(Review review) {
-    // TODO PROCEDIMENTO PRA DELETAR REVIEW
+    if (review.user_id == user.id) {
+      // TODO PROCEDIMENTO PRA DELETAR REVIEW
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Você não pode deletar esta review!"),
+          duration: Duration(seconds: 2), // Duração do SnackBar
+        ),
+      );
+    }
   }
 
   @override
