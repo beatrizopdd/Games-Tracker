@@ -316,7 +316,7 @@ class GameController {
   }
 
   //FAZER DEPOIS DO REVIEW
-  static Future<List<Game>> filtronota(bool order) async {
+  static Future<List<Game>> filtronota(int score) async {
     //????
     /*  if (name == '' ||
         description == '' ||

@@ -151,11 +151,10 @@ class _GamePageState extends State<GamePage> {
                         TextButton(
                           child: const Text("Editar"),
                           onPressed: () async {
-                            // TODO procedimentto para atualizar o jogo
                             //String? game_gender_name = await GameController.findGenreListfromGame(game);
                            
                             _newGenreController.text = await GenreController.updategenre(_newGenreController.text,game.id);//Aventura- Aventura,RPG
-                            
+                        
                             //_newGenreController.text = genrefudido;
                             game = await GameController.updategame(_newNameController.text, _newDescriptionController.text, _newReleaseDateController.text, game.id) as Game; 
                             //GameController.cadastraGame(user.id, _newNameController.text, _newDescriptionController.text, _newReleaseDateController.text,_newGenreController.text);

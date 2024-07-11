@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:games_tracker/controller/game_controller.dart';
 import 'package:games_tracker/controller/review_controller.dart';
@@ -54,8 +56,7 @@ class _FeedState extends State<Feed> {
             _filterDataController.text);
         break;
       case 4:
-        //TODO MEDIA
-        gameList = [];
+        gameList = await ReviewController.filtronota(double.parse(_filterDataController.text));//esse media é para ser o media que a pessoa quer buscar
         break;
       default:
         break;
@@ -63,7 +64,7 @@ class _FeedState extends State<Feed> {
     for (var game in gameList) {
       print('Teste for');
       String media;
-      media = ReviewController.mediaByGame(game.id) as String;
+      //media = ReviewController.mediaByGame(game.id) as String;
       print('Teste mediaByGame');
     }
     return gameList;

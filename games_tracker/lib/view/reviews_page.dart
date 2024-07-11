@@ -18,9 +18,11 @@ class _ReviewPageState extends State<ReviewPage> {
   late double _newScoreController;
   TextEditingController _newDescriptionController = TextEditingController();
 
+
   // Lista de reviews
   // pra diferenciar se vem do feed (Minhas reviews recentes) ou do jogo (Ver reviewes)
   // ver se game_id == 0
+
   Future<List<Review>> getReviews() async {
     List<Review> reviewList = [];
 
@@ -89,8 +91,9 @@ class _ReviewPageState extends State<ReviewPage> {
                   // Botão de envio
                   TextButton(
                     child: const Text("Editar"),
-                    onPressed: () {
+                    onPressed: () async {
                       // TODO procedimento de atualizar review
+                      review = (await ReviewController.atualizaReview((_newScoreController),_newDescriptionController.text,DateTime.now.toString(),review.id,review.game_id,review.user_id))!;
                       Navigator.pop(context);
                     },
                   ),
@@ -214,7 +217,7 @@ class _ReviewPageState extends State<ReviewPage> {
                             onDismissed: (direction) {
                               // Atualizar review
                               if (direction == DismissDirection.startToEnd) {
-                                updateReview(reviewList[index]);
+                                updateReview(reviewList[index]);//Q FUNCAO É ESSA?
 
                               // Remover review
                               } else if (direction == DismissDirection.endToStart) {

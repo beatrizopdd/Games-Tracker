@@ -1,3 +1,6 @@
+import 'package:games_tracker/controller/game_controller.dart';
+
+import '../model/game.dart';
 import 'database_controller.dart';
 
 import 'package:sqflite/sqflite.dart';
@@ -249,4 +252,73 @@ class ReviewController {
     return result;
   }
 }*/
+
+  static Future<List<Game>> filtronota(double score) async {
+    //????
+    /*  if (name == '' ||
+        description == '' ||
+        release_date == '' ||
+        genre == '' ||
+        user_id < 1) {
+      return 0;
+    } */
+
+    // Definindo os parâmetros para a consulta
+    String table = 'review';
+    List<String> columns = [
+      'game_id',
+    ];
+    String where = 'score LIKE ?';
+    List<dynamic> whereArgs = [score];
+    String? groupBy;
+    String? having;
+    String? orderBy; //ordenação
+    int? limit;
+    int? offset;
+
+    // Executando a consulta
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+      groupBy: groupBy,
+      having: having,
+      orderBy: orderBy,
+      limit: limit,
+      offset: offset,
+    );
+
+    List<Game> games = []; // Inicializa a lista de jogos
+    for (var game in result) {
+      Game? value = await GameController.findGameID(game['game_id']);
+      games.add(value!);
+    }
+
+    for (var game in games) {
+      print(game.name);
+    }
+
+    return games;
+  }
+
+
+    static Future<Review?> atualizaReview(
+    double score, String description, String date,int id,int game_id,int user_id) async {
+    //para o usuario atualizar o jogo
+    var database = await _db;
+    Map<String, dynamic> updatedData = {
+      'score': description,
+      'date': date,
+      'description': description
+    };
+    //int result =
+    await database!
+        .update('review', updatedData, where: "id = ?", whereArgs: [id]);
+
+    Review? aux_review = await findReview(user_id,game_id);
+
+    return (aux_review); //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
+  }
 }
