@@ -42,8 +42,8 @@ class _ReviewPageState extends State<ReviewPage> {
 
     for (Review review in reviewList) {
       User? author = await UserController.findUserByID(review.user_id);
-      reviewAuthor.add(author);
-      Game? game = await GameController.findGameID(review.game_id);
+      reviewAuthor.add(author!);
+      Game? game = await GameController.findGameByID(review.game_id);
       reviewGame.add(game!);
     }
   
@@ -271,12 +271,12 @@ class _ReviewPageState extends State<ReviewPage> {
                             ),
 
                             // Autor da review
-                            title: const Text(
+                            title: Text(
                               reviewAuthor[index].name,
                               style: const TextStyle(fontSize: 15),
                             ),
 
-                            trailing: const Text(
+                            trailing: Text(
                               reviewGame[index].name,
                               style: const TextStyle(fontSize: 15),
                             ),

@@ -50,13 +50,9 @@ class GameController {
     List<String> lista_generos = genre.split(',');
 
     for (String s in lista_generos) {
-      print("printando S $s");
       int res_gen =
           await GenreController.cadastraGenre(s); //vai ficar dentro do for
-      print("resgen $res_gen");
-      int res_gen_game =
           await Game_Genre_Controller.cadastraGame_Genre(result, res_gen);
-      print("resgengame $res_gen_game");
     }
 
     //int res_gen = await GenreController.cadastraGenre(genre);//vai ficar dentro do for
@@ -66,7 +62,6 @@ class GameController {
     //}
     //mandar id do game pra genre_game e o id do genre pra la também, o res_gen e o result geram os ids
 
-    print(result);
     return result;
   }
 
@@ -114,14 +109,6 @@ class GameController {
       game = Game.fromMap(result.first);
     }
 
-    // Imprimindo o jogo para verificar o mapeamento
-
-    if (game != null) {
-      print(
-          'ID: ${game.id}, User_ID: ${game.user_id} Name: ${game.name}, Release_Date: ${game.release_date}, Description: ${game.description}');
-    } else {
-      print('Nenhum game encontrado na lista.');
-    }
     return game;
   }
 
@@ -153,14 +140,6 @@ class GameController {
       game = Game.fromMap(result.first);
     }
 
-    // Imprimindo o jogo para verificar o mapeamento
-
-    if (game != null) {
-      print(
-          'ID: ${game.id}, User_ID: ${game.user_id} Name: ${game.name}, Release_Date: ${game.release_date}, Description: ${game.description}');
-    } else {
-      print('Nenhum game encontrado na lista.');
-    }
     return game;
   }
 
@@ -297,10 +276,6 @@ class GameController {
       games.add(value);
     }
 
-    for (var game in games) {
-      print(game.name);
-    }
-
     return games;
   }
 
@@ -351,10 +326,6 @@ class GameController {
     for (var game in result) {
       Game value = Game.fromMap(game);
       games.add(value);
-    }
-
-    for (var game in games) {
-      print(game.name);
     }
 
     return games;
@@ -418,13 +389,12 @@ class GameController {
       limit: limit,
       offset: offset,
     );
-    print("sla");
+
     List<Game> games = [];
     for (var row in result) {
       var gameId = row['game_id'];
       Game? aux = await findGameByID(gameId);
       games.add(aux!);
-      print('Game ID: $gameId');
     }
 
     return games;
@@ -509,7 +479,6 @@ class GameController {
     List<Game> gameList = [];
 
     double media = double.parse(stringMedia);
-    print('media = $media');
 
     result = await database!.rawQuery(
         'SELECT game_id FROM review GROUP BY game_id HAVING AVG(score) > ? AND AVG(score) < ?',

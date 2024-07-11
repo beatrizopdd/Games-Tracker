@@ -16,7 +16,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   late User user;
-  late String gameAuthor;
+  late User? gameAuthor;
   late Game game;
   late String avg;
 
@@ -34,6 +34,7 @@ class _GamePageState extends State<GamePage> {
   Future<Game> updateGameData() async {
     game = (await GameController.findGameByID(game.id))!;
     avg = (await ReviewController.mediaByGame(game.id))!;
+    gameAuthor = (await UserController.findUserByID(game.user_id))!;
 
     return game;
   }
@@ -45,7 +46,6 @@ class _GamePageState extends State<GamePage> {
     user = args[0] as User;
     game = args[1] as Game;
     avg = args[2] as String;
-
     return Scaffold(
       appBar: AppBar(
         // Aparência
@@ -343,7 +343,7 @@ class _GamePageState extends State<GamePage> {
                         ),
                       ),
                       Text(
-                        gameAuthor,
+                        gameAuthor!.name,
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],

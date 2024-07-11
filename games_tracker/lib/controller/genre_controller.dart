@@ -60,69 +60,9 @@ class GenreController {
       genre = Genre.fromMap(result.first);
     }
 
-    // Imprimindo o genero para verificar o mapeamento
-    //for (var i in result) {
-      //result tem todas as instancias do genero
-     //print(i);
-    //}
-
-    if (genre != null) {
-      print('ID: ${genre.id}, Genero: ${genre.name}');
-    } else {
-      print('Nenhum item desse gênero encontrado na lista.');
-    }
-
     return genre;
   }
 
-  /*static Future<int> cadastraGenre(
-      String name) async {
-    if (name == '') {
-      return 0;
-    }
-
-    // Definindo os parâmetros para a consulta
-    String table = 'genre';
-    List<String> columns = ['id', 'name'];
-    String where = 'name LIKE ?';
-    List<dynamic> whereArgs = ['%$name%'];
-    String? groupBy;
-    String? having;
-    String? orderBy;
-    int? limit;
-    int? offset;
-
-    // Executando a consulta
-    var database = await _db;
-    List<Map<String, dynamic>> result = await database!.query(
-      table,
-      columns: columns,
-      where: where,
-      whereArgs: whereArgs,
-      groupBy: groupBy,
-      having: having,
-      orderBy: orderBy,
-      limit: limit,
-      offset: offset,
-    );
-
-    if (result.isEmpty) {
-      return insertGenre(name);
-    } else {
-      return -1;
-    }
-  }
-
-    //Nosso
-    static Future<int> deleteGenre(String name) async {
-    var database = await _db;
-
-    int result =
-        await database!.delete(tableName, where: "name = ?", whereArgs: [name]);
-
-    print(result);
-    return result;
-  }*/
 
   static Future<int> cadastraGenre(String name) async {
     //teste
@@ -143,12 +83,10 @@ class GenreController {
       whereArgs: ['%$name%'],//'%name%
     );
 
-    print('Query result: $result');
 
     if (result.isEmpty) {
       return insertGenre(name);
     } else {
-      print("Genre Já Existe");
       int id = result[0]['id'];
       return id;
     }
@@ -166,25 +104,18 @@ class GenreController {
 
 static Future<String> updateGenre(String name,int game_id) async {//para o usuario atualizar o jogo
    //Aventura,Ação,RPG,Aventuraaaa
-    print("TESTANDO UPDATE GENRE");
-    print(name);
     
     Set<String> lista_generos = name.split(',').toSet();
 
     await deleteGenre(game_id);
     
     for (String s in lista_generos) {
-      print("printando S $s");
       int res_gen =
           await GenreController.cadastraGenre(s.trim()); //vai ficar dentro do for
-      print("resgen $res_gen");
       if(res_gen > 0){
-        int res_gen_game =
           await Game_Genre_Controller.cadastraGame_Genre(game_id, res_gen);
-          print("resgengame $res_gen_game");
         }
     }
-    print(lista_generos.toString());
     return (lista_generos.toString());//cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
   } 
 

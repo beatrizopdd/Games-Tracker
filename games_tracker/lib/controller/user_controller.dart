@@ -57,9 +57,6 @@ class UserController {
       user = User.fromMap(result.first);
     }
     
-    if (user == null) {
-      print('Nenhum game encontrado na lista.');
-    }
     return user;
   }
 
@@ -98,15 +95,6 @@ class UserController {
     User? user;
     if (result.isNotEmpty) {
       user = User.fromMap(result.first);
-    }
-
-    // Imprimindo o usuário para verificar o mapeamento
-
-    if (user != null) {
-      print(
-          'ID: ${user.id}, Name: ${user.name}, Email: ${user.email}, Password: ${user.password}');
-    } else {
-      print('Nenhum usuário encontrado na lista.');
     }
 
     return user;

@@ -54,7 +54,6 @@ class ReviewController {
       review = Review.fromMap(result.first);
     }
 
-
     return review;
   }
 
@@ -195,13 +194,11 @@ class ReviewController {
           .query(table, columns: columns, where: where, whereArgs: whereArgs);
     }
 
-
     List<Review> reviews = []; // Inicializa a lista de reviews
     for (var game in result) {
       Review value = Review.fromMap(game);
       reviews.add(value);
     }
-
 
     return reviews; // Retorna a lista de reviews
   }
@@ -242,6 +239,7 @@ class ReviewController {
       return (aux_review);
       //para bea
     }
+    return null;
 //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
   }
 }
