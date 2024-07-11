@@ -29,6 +29,14 @@ class _GamePageState extends State<GamePage> {
   double _scoreController = 0;
   TextEditingController _descriptionController = TextEditingController();
 
+  // Isso garante que o jogo esteja sempre atualizado
+  Future<Game> updateGameData() async {
+    game = (await GameController.findGameID(game.id))!;
+    avg = (await ReviewController.mediaByGame(game.id))!;
+
+    return game;
+  }
+
   @override
   Widget build(BuildContext context) {
     List<dynamic> args =
@@ -40,18 +48,9 @@ class _GamePageState extends State<GamePage> {
     return Scaffold(
       // Nome do jogo
       appBar: AppBar(
-        title: Text(
-          game.name,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-
         // Aparência
         foregroundColor: Colors.white,
-        centerTitle: true,
+        //centerTitle: true,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
@@ -154,19 +153,19 @@ class _GamePageState extends State<GamePage> {
                           child: const Text("Editar"),
                           onPressed: () async {
                             //String? game_gender_name = await GameController.findGenreListfromGame(game);
+                            //_newGenreController.text = genrefudido;
+                            //GameController.cadastraGame(user.id, _newNameController.text, _newDescriptionController.text, _newReleaseDateController.text,_newGenreController.text);
 
+                            //Aventura- Aventura,RPG
                             _newGenreController.text =
                                 await GenreController.updategenre(
-                                    _newGenreController.text,
-                                    game.id); //Aventura- Aventura,RPG
+                                    _newGenreController.text, game.id);
 
-                            //_newGenreController.text = genrefudido;
-                            game = await GameController.updategame(
+                            await GameController.updategame(
                                 _newNameController.text,
                                 _newDescriptionController.text,
                                 _newReleaseDateController.text,
-                                game.id) as Game;
-                            //GameController.cadastraGame(user.id, _newNameController.text, _newDescriptionController.text, _newReleaseDateController.text,_newGenreController.text);
+                                game.id);
 
                             Navigator.of(context).pop();
                           },
@@ -278,7 +277,9 @@ class _GamePageState extends State<GamePage> {
                               _descriptionController.text,
                               _scoreController,
                               DateTime.now().toString());
-                          Navigator.of(context).pop();                
+                          Navigator.of(context).pop();
+                          _scoreController = 0;
+                          _descriptionController.text = "";
                         },
                       ),
 
@@ -287,7 +288,7 @@ class _GamePageState extends State<GamePage> {
                         child: const Text("Cancelar"),
                         onPressed: () {
                           _scoreController = 0;
-                          _descriptionController = TextEditingController();
+                          _descriptionController.text = "";
                           Navigator.pop(context);
                         },
                       ),
@@ -301,86 +302,132 @@ class _GamePageState extends State<GamePage> {
       ),
 
       // Corpo
-      body: Padding(
-        padding: const EdgeInsets.all(5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 15),
+      body: FutureBuilder(
+        future: updateGameData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return Padding(
+              padding: const EdgeInsets.all(5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15),
 
-            // Lançamento
-            Row(
-              children: [
-                const Text(
-                  "LANÇAMENTO: ",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
+                  // Nome do jogo
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        game.name,
+                        style: const TextStyle(
+                          fontSize: 34,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Text(
-                  game.release_date,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
 
-            // Espaço
-            const SizedBox(height: 10),
+                  // Espaço
+                  const SizedBox(height: 15),
 
-            // Média
-            Row(
-              children: [
-                const Text(
-                  "MÉDIA: ",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
+                  // Usuário que adicionou o jogo
+                  Row(
+                    children: [
+                      const Text(
+                        "ADICIONADO POR ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                      Text(
+                        "${game.user_id}",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
-                ),
-                Text(
-                  avg, //TODO pegar Media do Jogo
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const Icon(Icons.star, size: 20, color: Colors.amber),
-              ],
-            ),
 
-            // Espaço
-            const SizedBox(height: 10),
+                  // Espaço
+                  const SizedBox(height: 10),
 
-            // Descrição
-            const Text(
-              "DESCRIÇÃO:",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-            ),
-
-            // Espaço
-            const SizedBox(height: 5),
-
-            Text(
-              game.description,
-              style: const TextStyle(fontSize: 16),
-            ),
-
-            // Ver reviews
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                        "/reviews_page",
-                        arguments: [user, game.id],
-                      );
-                    },
-                    child: const Text("Ver reviews"),
+                  // Lançamento
+                  Row(
+                    children: [
+                      const Text(
+                        "LANÇADO EM ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                      Text(
+                        game.release_date,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            )
-          ],
-        ),
+
+                  // Espaço
+                  const SizedBox(height: 10),
+
+                  // Média
+                  Row(
+                    children: [
+                      const Text(
+                        "MÉDIA: ",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                        ),
+                      ),
+                      Text(
+                        avg, //TODO pegar Media do Jogo
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const Icon(Icons.star, size: 20, color: Colors.amber),
+                    ],
+                  ),
+
+                  // Espaço
+                  const SizedBox(height: 10),
+
+                  // Descrição
+                  const Text(
+                    "DESCRIÇÃO:",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+                  ),
+
+                  // Espaço
+                  const SizedBox(height: 5),
+
+                  Text(
+                    game.description,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+
+                  // Ver reviews
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              "/reviews_page",
+                              arguments: [user, game.id],
+                            );
+                          },
+                          child: const Text("Ver reviews"),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
