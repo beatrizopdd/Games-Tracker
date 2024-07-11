@@ -48,27 +48,12 @@ class ReviewController {
     );
 
     // Verificando se a lista não está vazia antes de criar o review
-    print("tesssssste");
     Review? review;
 
     if (result.isNotEmpty) {
-      print("blabla");
       review = Review.fromMap(result.first);
     }
 
-    print("taaaa");
-    // Imprimindo o review para verificar o mapeamento
-    for (var i in result) {
-      print(i);
-    }
-    print("bea");
-    if (review != null) {
-      print(
-          'ID: ${review.id}, USER_ID: ${review.user_id}, GAME_ID: ${review.game_id}, SCORE: ${review.score}, DESCRIPTION: ${review.date}');
-    } else {
-      print('Nenhum review encontrado na lista.');
-    }
-    print("tudo daqui é do find");
 
     return review;
   }
@@ -135,21 +120,50 @@ class ReviewController {
           .query(table, columns: columns, where: where, whereArgs: whereArgs);
     }
 
-    // Apenas para depuração
-    print("\n" * 5);
-    for (var row in result) {
-      print(row);
-    }
-    print("\n" * 5);
-
     List<Review> reviews = []; // Inicializa a lista de reviews
     for (var game in result) {
       Review value = Review.fromMap(game);
       reviews.add(value);
     }
 
-    for (var review in reviews) {
-      print(review.id);
+    return reviews; // Retorna a lista de reviews
+  }
+
+  static Future<List<Review>> objetifyTableReviewbyUser7DayFilter(
+      int? user_id) async {
+    var database = await _db;
+    List<Map<String, dynamic>> result = [];
+
+    if (user_id == null) {
+      result = await database!.query('review');
+    } else {
+      // Definindo os parâmetros para a consulta
+      String table = 'review';
+      List<String> columns = [
+        'id',
+        'user_id',
+        'game_id',
+        'score',
+        'description',
+        'date'
+      ];
+      String where = 'user_id LIKE ?';
+      List<dynamic> whereArgs = [user_id];
+      String orderBy = 'date DESC';
+
+      // Executando a consulta
+      var database = await _db;
+      result = await database!.query(table,
+          columns: columns,
+          where: where,
+          whereArgs: whereArgs,
+          orderBy: orderBy);
+    }
+
+    List<Review> reviews = []; // Inicializa a lista de reviews
+    for (var game in result) {
+      Review value = Review.fromMap(game);
+      reviews.add(value);
     }
 
     return reviews; // Retorna a lista de reviews
@@ -181,12 +195,6 @@ class ReviewController {
           .query(table, columns: columns, where: where, whereArgs: whereArgs);
     }
 
-    // Apenas para depuração
-    print("\n" * 5);
-    for (var row in result) {
-      print(row);
-    }
-    print("\n" * 5);
 
     List<Review> reviews = []; // Inicializa a lista de reviews
     for (var game in result) {
@@ -194,9 +202,6 @@ class ReviewController {
       reviews.add(value);
     }
 
-    for (var review in reviews) {
-      print(review.id);
-    }
 
     return reviews; // Retorna a lista de reviews
   }

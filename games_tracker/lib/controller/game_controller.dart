@@ -125,7 +125,7 @@ class GameController {
     return game;
   }
 
-  static Future<Game?> findGameID(int id) async {
+  static Future<Game?> findGameByID(int id) async {
     String table = 'game';
     List<String> columns = [
       'id',
@@ -374,7 +374,7 @@ class GameController {
     await database!
         .update('game', updatedData, where: "id = ?", whereArgs: [id]);
 
-    Game? aux_game = await findGameID(id);
+    Game? aux_game = await findGameByID(id);
 
     return (aux_game); //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
   }
@@ -422,7 +422,7 @@ class GameController {
     List<Game> games = [];
     for (var row in result) {
       var gameId = row['game_id'];
-      Game? aux = await findGameID(gameId);
+      Game? aux = await findGameByID(gameId);
       games.add(aux!);
       print('Game ID: $gameId');
     }
@@ -520,7 +520,7 @@ class GameController {
       for (var map in result) {
         if (map['game_id'] != null) {
           id = map['game_id'] as int;
-          Game? game = await findGameID(id);
+          Game? game = await findGameByID(id);
           gameList.add(game!);
         }
       }

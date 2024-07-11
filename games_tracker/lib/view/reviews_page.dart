@@ -28,7 +28,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
     switch (game_id) {
       case 0:
-        reviewList = await ReviewController.objetifyTableReviewbyUser(user.id);
+        reviewList = await ReviewController.objetifyTableReviewbyUser7DayFilter(user.id);
         break;
       default:
         reviewList = await ReviewController.objetifyTableReviewbyGame(game_id);
