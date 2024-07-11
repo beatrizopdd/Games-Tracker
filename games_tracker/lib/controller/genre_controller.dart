@@ -1,5 +1,3 @@
-import 'package:games_tracker/controller/review_controller.dart';
-
 import 'database_controller.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/genre.dart';
@@ -166,8 +164,8 @@ class GenreController {
   }
 
 
-static Future<String> updategenre(String name,int game_id) async {//para o usuario atualizar o jogo
-    var database = await _db;//Aventura,Ação,RPG,Aventuraaaa
+static Future<String> updateGenre(String name,int game_id) async {//para o usuario atualizar o jogo
+   //Aventura,Ação,RPG,Aventuraaaa
     print("TESTANDO UPDATE GENRE");
     print(name);
     

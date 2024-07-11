@@ -1,6 +1,3 @@
-import 'package:games_tracker/controller/game_controller.dart';
-
-import '../model/game.dart';
 import 'database_controller.dart';
 
 import 'package:sqflite/sqflite.dart';

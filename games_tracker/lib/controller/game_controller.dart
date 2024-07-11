@@ -509,11 +509,11 @@ class GameController {
     List<Game> gameList = [];
 
     double media = double.parse(stringMedia);
-    print(media);
+    print('media = $media');
 
     result = await database!.rawQuery(
-        'SELECT game_id FROM review GROUP BY game_id HAVING AVG(score) = ?',
-        [media]);
+        'SELECT game_id FROM review GROUP BY game_id HAVING AVG(score) > ? AND AVG(score) < ?',
+        [media - 0.01, media + 0.01]);
 
     if (result.isNotEmpty) {
       int id;

@@ -158,7 +158,7 @@ class _GamePageState extends State<GamePage> {
 
                             //Aventura- Aventura,RPG
                             _newGenreController.text =
-                                await GenreController.updategenre(
+                                await GenreController.updateGenre(
                                     _newGenreController.text, game.id);
 
                             await GameController.updategame(
