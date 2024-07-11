@@ -31,7 +31,6 @@ class _FeedState extends State<Feed> {
   // op = 2 pra lista selecionada por data
   // op = 3 pra lista selecionada por genero
   // op = 4 pra lista selecionada por média
-
   Future<List<Map<String, dynamic>>> getGames() async {
     List<Game> gameList = [];
     switch (op) {
@@ -446,64 +445,67 @@ class _FeedState extends State<Feed> {
           FutureBuilder(
             future: getGames(),
             builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  List<Map<String, dynamic>>? gameListWithAverages =
-                      snapshot.data;
-                  if (gameListWithAverages!.isEmpty) {
-                    return const Center(child: Icon(Icons.videogame_asset_off));
-                  } else {
-                    return Expanded(
-                      child: ListView.builder(
-                        itemCount: gameListWithAverages.length,
-                        itemBuilder: (context, index) {
-                          Game game = gameListWithAverages[index]['game'];
-                          String average =
-                              gameListWithAverages[index]['average'];
-                          return ListTile(
-                            contentPadding: const EdgeInsets.all(5),
-                            leading:
-                                const Icon(Icons.videogame_asset, size: 40),
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.data == null) {
+                return const Center(
+                    child: Text("Lista de jogos retornando null"));
+              } else {
+                List<Map<String, dynamic>>? gameListWithAverages =
+                    snapshot.data;
+                if (gameListWithAverages!.isEmpty) {
+                  return const Center(child: Icon(Icons.videogame_asset_off));
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: gameListWithAverages.length,
+                      itemBuilder: (context, index) {
+                        Game game = gameListWithAverages[index]['game'];
+                        String average = gameListWithAverages[index]['average'];
+                        return ListTile(
+                          contentPadding: const EdgeInsets.all(5),
+                          leading: const Icon(Icons.videogame_asset, size: 40),
 
-                            // Informações
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                // Nome
-                                Expanded(child: Text(game.name)),
+                          // Informações
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              // Nome
+                              Expanded(child: Text(game.name)),
 
-                                // Média
-                                Row(
-                                  children: [
-                                    Text(
-                                      average,
-                                      style: const TextStyle(fontSize: 15),
-                                    ),
-                                    const Icon(
-                                      Icons.star,
-                                      size: 20,
-                                      color: Colors.amber,
-                                    ),
-                                  ],
-                                ),
+                              // Média
+                              Row(
+                                children: [
+                                  Text(
+                                    average,
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    size: 20,
+                                    color: Colors.amber,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+
+                          // Entrar na página
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              "/game_page",
+                              arguments: [
+                                user,
+                                game,
+                                gameListWithAverages[index]['average']
                               ],
-                            ),
-
-                            // Entrar na página
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                "/game_page",
-                                arguments: [user, game, gameListWithAverages[index]['average']],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    );
-                  }
-
-                default:
-                  return const Center(child: CircularProgressIndicator());
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                }
               }
             },
           ),

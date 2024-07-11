@@ -175,88 +175,89 @@ class _ReviewPageState extends State<ReviewPage> {
           FutureBuilder(
             future: getReviews(),
             builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  List<Review>? reviewList = snapshot.data;
-                  if (reviewList!.isEmpty) {
-                    return const Center(child: Icon(Icons.block));
-                  } else {
-                    return Expanded(
-                      child: ListView.builder(
-                        itemCount: reviewList.length,
-                        itemBuilder: (context, index) {
-                          return Dismissible(
-                            key: Key(DateTime.now().microsecond.toString()),
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.data == null) {
+                return const Center(
+                    child: Text("Lista de reviews retornando null"));
+              } else {
+                List<Review>? reviewList = snapshot.data;
+                if (reviewList!.isEmpty) {
+                  return const Center(child: Icon(Icons.block));
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: reviewList.length,
+                      itemBuilder: (context, index) {
+                        return Dismissible(
+                          key: Key(DateTime.now().microsecond.toString()),
 
-                            // Aparência
-                            background: Container(
-                              color: Colors.blue,
-                              padding: const EdgeInsets.all(16),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.edit, color: Colors.white)
-                                ],
-                              ),
+                          // Aparência
+                          background: Container(
+                            color: Colors.blue,
+                            padding: const EdgeInsets.all(16),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [Icon(Icons.edit, color: Colors.white)],
                             ),
-                            secondaryBackground: Container(
-                              color: Colors.red,
-                              padding: const EdgeInsets.all(16),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Icon(Icons.delete, color: Colors.white)
-                                ],
-                              ),
+                          ),
+                          secondaryBackground: Container(
+                            color: Colors.red,
+                            padding: const EdgeInsets.all(16),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(Icons.delete, color: Colors.white)
+                              ],
                             ),
+                          ),
 
-                            // Ações
-                            onDismissed: (direction) {
-                              // Atualizar review
-                              if (direction == DismissDirection.startToEnd) {
-                                updateReview(reviewList[index]);
+                          // Ações
+                          onDismissed: (direction) {
+                            // Atualizar review
+                            if (direction == DismissDirection.startToEnd) {
+                              updateReview(reviewList[index]);
 
                               // Remover review
-                              } else if (direction == DismissDirection.endToStart) {
-                                deleteReview(reviewList[index]);
-                                const snackBar = SnackBar(
-                                  content: Text("Review excluída!"),
-                                  duration: Duration(seconds: 5),
-                                );
-                                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                              }
-                            },
+                            } else if (direction ==
+                                DismissDirection.endToStart) {
+                              deleteReview(reviewList[index]);
+                              const snackBar = SnackBar(
+                                content: Text("Review excluída!"),
+                                duration: Duration(seconds: 5),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(snackBar);
+                            }
+                          },
 
-                            // Corpo
-                            child: ListTile(
-                              contentPadding: const EdgeInsets.all(5),
+                          // Corpo
+                          child: ListTile(
+                            contentPadding: const EdgeInsets.all(5),
 
-                              // Gênero
-                              leading: const Icon(Icons.person, size: 40),
+                            // Gênero
+                            leading: const Icon(Icons.person, size: 40),
 
-                              // Nota
-                              title: Row(
-                                children: [
-                                  Text(
-                                    "${reviewList[index].score}",
-                                    style: const TextStyle(fontSize: 15),
-                                  ),
-                                  const Icon(Icons.star,
-                                      size: 20, color: Colors.amber),
-                                ],
-                              ),
-
-                              // Descrição
-                              subtitle: Text(reviewList[index].description),
+                            // Nota
+                            title: Row(
+                              children: [
+                                Text(
+                                  "${reviewList[index].score}",
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                                const Icon(Icons.star,
+                                    size: 20, color: Colors.amber),
+                              ],
                             ),
-                          );
-                        },
-                      ),
-                    );
-                  }
 
-                default:
-                  return const Center(child: CircularProgressIndicator());
+                            // Descrição
+                            subtitle: Text(reviewList[index].description),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }
               }
             },
           ),
