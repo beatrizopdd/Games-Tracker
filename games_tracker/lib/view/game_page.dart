@@ -16,7 +16,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   late User user;
-  late User? gameAuthor;
+  late User gameAuthor;
   late Game game;
   late String avg;
 
@@ -38,6 +38,7 @@ class _GamePageState extends State<GamePage> {
 
     return game;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -343,7 +344,7 @@ class _GamePageState extends State<GamePage> {
                         ),
                       ),
                       Text(
-                        gameAuthor!.name,
+                        gameAuthor.name,
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],

@@ -38,7 +38,7 @@ class UserController {
       'email',
       'password',
     ];
-    String where = 'id = LIKE';
+    String where = 'id = ?';
     List<dynamic> whereArgs = [user_id];
 
     // Executando a consulta

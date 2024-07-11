@@ -15,8 +15,8 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   late User user;
-  late List<User> reviewAuthor;
-  late List<Game> reviewGame;
+  late List<User> reviewAuthor = [];
+  late List<Game> reviewGame = [];
   late int game_id;
 
   // Para a atualização da review
@@ -32,13 +32,13 @@ class _ReviewPageState extends State<ReviewPage> {
 
     switch (game_id) {
       case 0:
-        reviewList = await ReviewController.objetifyTableReviewbyUser7DayFilter(user.id);
+        reviewList =
+            await ReviewController.objetifyTableReviewbyUser7DayFilter(user.id);
         break;
       default:
         reviewList = await ReviewController.objetifyTableReviewbyGame(game_id);
         break;
     }
-
 
     for (Review review in reviewList) {
       User? author = await UserController.findUserByID(review.user_id);
@@ -46,7 +46,7 @@ class _ReviewPageState extends State<ReviewPage> {
       Game? game = await GameController.findGameByID(review.game_id);
       reviewGame.add(game!);
     }
-  
+
     return reviewList;
   }
 
@@ -273,12 +273,20 @@ class _ReviewPageState extends State<ReviewPage> {
                             // Autor da review
                             title: Text(
                               reviewAuthor[index].name,
-                              style: const TextStyle(fontSize: 15),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
 
+                            // Jogo da review
                             trailing: Text(
                               reviewGame[index].name,
-                              style: const TextStyle(fontSize: 15),
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
 
                             // Descrição
