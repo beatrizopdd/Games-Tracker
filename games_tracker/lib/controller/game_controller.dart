@@ -431,18 +431,8 @@ class GameController {
     return games;
   }
 
-  static Future<String?> findGenreListfromGame(Game jogo) async {
-    /*
-
-    // Executando a consulta em Game para descobrir o ID do Jogo
-    
-    List<Map<String, dynamic>> game_id = await database!.query(
-      table,
-      columns: columns,
-      where: where,
-      whereArgs: whereArgs,
-    );*/
-
+  
+  static Future<String?> findGenreListfromGame(int jogo_id) async {
     //Acesso ao Banco de Dados
     var database = await _db;
 
@@ -456,7 +446,7 @@ class GameController {
     table = 'game_genre';
     columns = ['genre_id'];
     where = 'game_id = ?';
-    whereArgs = [jogo.id];
+    whereArgs = [jogo_id];
 
     //Executando a consulta em Game_Genre para descobrir o ID do Genre
     List<Map<String, dynamic>> genre_id_list = await database!.query(
@@ -485,41 +475,16 @@ class GameController {
         where: where,
         whereArgs: whereArgs,
       );
-      print('genre_name = $genre_name');
+
       var name = genre_name.first['name'];
       if (final_result == '') {
         final_result = '$name';
       } else {
-        final_result = '$final_result ,$name';
+        final_result = '$final_result,$name';
       }
     }
 
-    print(final_result);
-
+    //Retorna uma String composta pela lista de Gêneros do Jogo => return "Acao, Aventura, RPG"
     return final_result;
-    /*
-    List<Map<String, dynamic>> result;
-
-    await database.query(
-      table,
-      columns: columns,
-      where: where,
-      whereArgs: whereArgs,
-    );
-
-    // Verificando se a lista não está vazia antes de criar o genero
-    Genre? genre;
-    if (result.isNotEmpty) {
-      genre = Genre.fromMap(result.first);
-    }
-
-    // Imprimindo o jogo para verificar o mapeamento
-
-    if (genre != null) {
-      print('ID: ${genre.id}, Name: ${genre.name}');
-    } else {
-      print('Nenhum genre encontrado na lista.');
-    }
-    return genre;*/
   }
 }
