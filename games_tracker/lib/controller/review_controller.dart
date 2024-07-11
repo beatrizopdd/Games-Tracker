@@ -199,25 +199,19 @@ class ReviewController {
 
   static Future<String?> mediaByGame(int game_id) async {
     var database = await _db;
+
     List<Map<String, dynamic>> result = [];
 
-    if (game_id == null) {
-      result = await database!
-          .rawQuery('SELECT AVG(score) as avg_score FROM review');
+    result = await database!.rawQuery(
+      'SELECT AVG(score) as avg_score FROM review WHERE game_id = ?',
+      [game_id]);
+
+      if (result.isNotEmpty && result.first['avg_score'] != null) {
+      double avg = result.first['avg_score'] as double;
+      return '$avg';
     } else {
-      result = await database!.rawQuery(
-          'SELECT AVG(score) as avg_score FROM review WHERE game_id = ?',
-          [game_id]);
+      return '--';
     }
-    String avg;
-    if (result.isEmpty) return 'Sem avaliações';
-    if (result.first['avg_score'] == null) {
-      return 'Sem Avaliações!';
-    }
-    avg = result.first['avg_score'];
-    print('game_id = $game_id');
-    print('avg = $avg');
-    return avg;
   }
 
   /*

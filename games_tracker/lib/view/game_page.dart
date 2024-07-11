@@ -17,6 +17,7 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   late User user;
   late Game game;
+  late String avg;
 
   // Para atualização do jogo
   TextEditingController _newNameController = TextEditingController();
@@ -30,10 +31,11 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Object> args =
-        ModalRoute.of(context)!.settings.arguments as List<Object>;
+    List<dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as List<dynamic>;
     user = args[0] as User;
     game = args[1] as Game;
+    avg = args[2] as String;
 
     return Scaffold(
       // Nome do jogo
@@ -153,15 +155,21 @@ class _GamePageState extends State<GamePage> {
                           onPressed: () async {
                             // TODO procedimentto para atualizar o jogo
                             //String? game_gender_name = await GameController.findGenreListfromGame(game);
-                           
-                            _newGenreController.text = await GenreController.updategenre(_newGenreController.text,game.id);//Aventura- Aventura,RPG
-                            
+
+                            _newGenreController.text =
+                                await GenreController.updategenre(
+                                    _newGenreController.text,
+                                    game.id); //Aventura- Aventura,RPG
+
                             //_newGenreController.text = genrefudido;
-                            game = await GameController.updategame(_newNameController.text, _newDescriptionController.text, _newReleaseDateController.text, game.id) as Game; 
+                            game = await GameController.updategame(
+                                _newNameController.text,
+                                _newDescriptionController.text,
+                                _newReleaseDateController.text,
+                                game.id) as Game;
                             //GameController.cadastraGame(user.id, _newNameController.text, _newDescriptionController.text, _newReleaseDateController.text,_newGenreController.text);
 
-
-                            Navigator.pop(context);
+                            Navigator.of(context).pop();
                           },
                         ),
 
@@ -270,9 +278,8 @@ class _GamePageState extends State<GamePage> {
                               game.id,
                               _descriptionController.text,
                               _scoreController,
-                              DateTime.now()
-                                  .toString());
-                          Navigator.pop(context);
+                              DateTime.now().toString());
+                          Navigator.of(context).pop();                
                         },
                       ),
 
@@ -323,7 +330,7 @@ class _GamePageState extends State<GamePage> {
             const SizedBox(height: 10),
 
             // Média
-            const Row(
+            Row(
               children: [
                 const Text(
                   "MÉDIA: ",
@@ -333,7 +340,7 @@ class _GamePageState extends State<GamePage> {
                   ),
                 ),
                 Text(
-                  'Oi', //TODO pegar Media do Jogo
+                  avg, //TODO pegar Media do Jogo
                   style: const TextStyle(fontSize: 16),
                 ),
                 const Icon(Icons.star, size: 20, color: Colors.amber),

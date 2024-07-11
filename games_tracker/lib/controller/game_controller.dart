@@ -239,22 +239,12 @@ class GameController {
           .query(table, columns: columns, where: where, whereArgs: whereArgs);
     }
 
-    // Apenas para depuração
-    print("\n" * 5);
-    for (var row in result) {
-      print(row);
-    }
-    print("\n" * 5);
-
     List<Game> games = []; // Inicializa a lista de jogos
     for (var game in result) {
       Game value = Game.fromMap(game);
       games.add(value);
     }
 
-    for (var game in games) {
-      print(game.name);
-    }
 
     return games; // Retorna a lista de jogos
   }
