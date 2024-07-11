@@ -102,7 +102,6 @@ class _FeedState extends State<Feed> {
           ),
         ),
 
-        
         actions: [
           IconButton(
             icon: const Icon(Icons.tune, color: Colors.white),
@@ -344,13 +343,14 @@ class _FeedState extends State<Feed> {
                     // Espaço
                     const SizedBox(height: 25),
 
-                    // Campo do ano de lançamento
+                    // Campo do lançamento
                     TextField(
                       controller: _releaseDateController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.calendar_month),
-                        labelText: "Ano de lançamento",
+                        labelText: "Data de lançamento",
+                        hintText: "aaaa-mm-dd",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -450,11 +450,17 @@ class _FeedState extends State<Feed> {
               } else if (snapshot.data == null) {
                 return const Center(
                     child: Text("Lista de jogos retornando null"));
+
+                // Se tudo deu certo:
               } else {
                 List<Map<String, dynamic>>? gameListWithAverages =
                     snapshot.data;
+
+                // Lista vazia
                 if (gameListWithAverages!.isEmpty) {
                   return const Center(child: Icon(Icons.videogame_asset_off));
+
+                  // Lista com elementos
                 } else {
                   return Expanded(
                     child: ListView.builder(
@@ -490,24 +496,22 @@ class _FeedState extends State<Feed> {
                             ],
                           ),
 
-                            // Entrar na página
-                            onTap: () {
-                              Navigator.of(context).pushNamed(
-                                "/game_page",
-                                arguments: [
-                                  user,
-                                  game,
-                                  gameListWithAverages[index]['average']
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    );
-                  }
-
-                
+                          // Entrar na página
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              "/game_page",
+                              arguments: [
+                                user,
+                                game,
+                                gameListWithAverages[index]['average']
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  );
+                }
               }
             },
           ),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:games_tracker/controller/game_controller.dart';
+import 'package:games_tracker/controller/user_controller.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/game.dart';
-
-import '../controller/genre_controller.dart';
-import '../controller/review_controller.dart';
+import 'package:games_tracker/controller/game_controller.dart';
+import 'package:games_tracker/controller/genre_controller.dart';
+import 'package:games_tracker/controller/review_controller.dart';
 /*import 'package:games_tracker/model/genre.dart';
 import 'package:games_tracker/model/review.dart';*/
 
@@ -16,6 +16,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   late User user;
+  late String gameAuthor;
   late Game game;
   late String avg;
 
@@ -31,6 +32,7 @@ class _GamePageState extends State<GamePage> {
 
   // Isso garante que o jogo esteja sempre atualizado
   Future<Game> updateGameData() async {
+    gameAuthor = "inserir find user by id";
     game = (await GameController.findGameID(game.id))!;
     avg = (await ReviewController.mediaByGame(game.id))!;
 
@@ -46,7 +48,6 @@ class _GamePageState extends State<GamePage> {
     avg = args[2] as String;
 
     return Scaffold(
-      // Nome do jogo
       appBar: AppBar(
         // Aparência
         foregroundColor: Colors.white,
@@ -313,7 +314,7 @@ class _GamePageState extends State<GamePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 10),
 
                   // Nome do jogo
                   Row(
@@ -343,7 +344,7 @@ class _GamePageState extends State<GamePage> {
                         ),
                       ),
                       Text(
-                        "${game.user_id}",
+                        gameAuthor,
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],
@@ -404,7 +405,7 @@ class _GamePageState extends State<GamePage> {
 
                   Text(
                     game.description,
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 17),
                   ),
 
                   // Ver reviews

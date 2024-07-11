@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:games_tracker/controller/game_controller.dart';
+import 'package:games_tracker/controller/user_controller.dart';
+import 'package:games_tracker/model/game.dart';
 import 'package:games_tracker/model/user.dart';
 import 'package:games_tracker/model/review.dart';
 //import 'package:games_tracker/model/game.dart';
@@ -12,12 +15,13 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   late User user;
+  late List<User> reviewAuthor;
+  late List<Game> reviewGame;
   late int game_id;
 
   // Para a atualização da review
   late double _newScoreController;
   TextEditingController _newDescriptionController = TextEditingController();
-
 
   // Lista de reviews
   // pra diferenciar se vem do feed (Minhas reviews recentes) ou do jogo (Ver reviewes)
@@ -34,6 +38,15 @@ class _ReviewPageState extends State<ReviewPage> {
         reviewList = await ReviewController.objetifyTableReviewbyGame(game_id);
         break;
     }
+
+
+    for (Review review in reviewList) {
+      User? author = await UserController.findUserByID(review.user_id);
+      reviewAuthor.add(author);
+      Game? game = await GameController.findGameID(review.game_id);
+      reviewGame.add(game!);
+    }
+  
     return reviewList;
   }
 
@@ -92,7 +105,13 @@ class _ReviewPageState extends State<ReviewPage> {
                   TextButton(
                     child: const Text("Editar"),
                     onPressed: () async {
-                      review = (await ReviewController.atualizaReview((_newScoreController),_newDescriptionController.text,DateTime.now.toString(),review.id,review.game_id,review.user_id))!;
+                      review = (await ReviewController.atualizaReview(
+                          (_newScoreController),
+                          _newDescriptionController.text,
+                          DateTime.now.toString(),
+                          review.id,
+                          review.game_id,
+                          review.user_id))!;
                       Navigator.pop(context);
                     },
                   ),
@@ -168,6 +187,7 @@ class _ReviewPageState extends State<ReviewPage> {
           ),
         ),
       ),
+
       // Corpo
       body: Column(
         children: [
@@ -182,6 +202,8 @@ class _ReviewPageState extends State<ReviewPage> {
               } else if (snapshot.data == null) {
                 return const Center(
                     child: Text("Lista de reviews retornando null"));
+
+                // Se tudo ser certo:
               } else {
                 List<Review>? reviewList = snapshot.data;
                 if (reviewList!.isEmpty) {
@@ -214,11 +236,11 @@ class _ReviewPageState extends State<ReviewPage> {
                             ),
                           ),
 
-                            // Ações
-                            onDismissed: (direction) {
-                              // Atualizar review
-                              if (direction == DismissDirection.startToEnd) {
-                                updateReview(reviewList[index]);
+                          // Ações
+                          onDismissed: (direction) {
+                            // Atualizar review
+                            if (direction == DismissDirection.startToEnd) {
+                              updateReview(reviewList[index]);
 
                               // Remover review
                             } else if (direction ==
@@ -235,21 +257,28 @@ class _ReviewPageState extends State<ReviewPage> {
 
                           // Corpo
                           child: ListTile(
-                            contentPadding: const EdgeInsets.all(5),
-
-                            // Gênero
-                            leading: const Icon(Icons.person, size: 40),
-
-                            // Nota
-                            title: Row(
+                            // Nota da review
+                            leading: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   "${reviewList[index].score}",
-                                  style: const TextStyle(fontSize: 15),
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                                 const Icon(Icons.star,
-                                    size: 20, color: Colors.amber),
+                                    size: 25, color: Colors.amber),
                               ],
+                            ),
+
+                            // Autor da review
+                            title: const Text(
+                              reviewAuthor[index].name,
+                              style: const TextStyle(fontSize: 15),
+                            ),
+
+                            trailing: const Text(
+                              reviewGame[index].name,
+                              style: const TextStyle(fontSize: 15),
                             ),
 
                             // Descrição
