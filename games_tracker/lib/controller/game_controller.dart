@@ -245,7 +245,6 @@ class GameController {
       games.add(value);
     }
 
-
     return games; // Retorna a lista de jogos
   }
 
@@ -431,7 +430,6 @@ class GameController {
     return games;
   }
 
-  
   static Future<String?> findGenreListfromGame(int jogo_id) async {
     //Acesso ao Banco de Dados
     var database = await _db;
@@ -457,7 +455,6 @@ class GameController {
     );
 
     //Trocando parâmetros para consulta em Genre
-
     table = 'genre';
     columns = ['name'];
     where = 'id = ?';
@@ -486,5 +483,49 @@ class GameController {
 
     //Retorna uma String composta pela lista de Gêneros do Jogo => return "Acao, Aventura, RPG"
     return final_result;
+  }
+
+  static Future<List<Game>> objetifyFiltroMedia(
+      List<Map<String, dynamic>> gameListWithAverages,
+      String stringMedia) async {
+    //Cria uma lista de jogos vazia
+    List<Game> gameList = [];
+
+    // Intera sobre a Lista de jogos e suas medias
+    //buscando aqueles jogos que possuem media igual a media passada como parametro
+    for (var row in gameListWithAverages) {
+      if (row['average'] == stringMedia) {
+        gameList.add(row['game']);
+      }
+    }
+
+    return gameList; // Retorna a lista de jogos
+  }
+
+  static Future<List<Game>> testeFiltroMedia(userID, String stringMedia) async {
+    var database = await _db;
+
+    List<Map<String, dynamic>> result = [];
+    List<Game> gameList = [];
+
+    double media = double.parse(stringMedia);
+    print(media);
+
+    result = await database!.rawQuery(
+        'SELECT game_id FROM review GROUP BY game_id HAVING AVG(score) = ?',
+        [media]);
+
+    if (result.isNotEmpty) {
+      int id;
+      for (var map in result) {
+        if (map['game_id'] != null) {
+          id = map['game_id'] as int;
+          Game? game = await findGameID(id);
+          gameList.add(game!);
+        }
+      }
+    }
+
+    return gameList; // Retorna a lista de jogos
   }
 }

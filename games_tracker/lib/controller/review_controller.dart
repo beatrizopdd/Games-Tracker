@@ -57,8 +57,8 @@ class ReviewController {
     if (result.isNotEmpty) {
       print("blabla");
       review = Review.fromMap(result.first);
-      }
-    
+    }
+
     print("taaaa");
     // Imprimindo o review para verificar o mapeamento
     for (var i in result) {
@@ -210,19 +210,20 @@ class ReviewController {
     List<Map<String, dynamic>> result = [];
 
     result = await database!.rawQuery(
-      'SELECT AVG(score) as avg_score FROM review WHERE game_id = ?',
-      [game_id]);
+        'SELECT AVG(score) as avg_score FROM review WHERE game_id = ?',
+        [game_id]);
 
-      if (result.isNotEmpty && result.first['avg_score'] != null) {
+    if (result.isNotEmpty && result.first['avg_score'] != null) {
       double avg = result.first['avg_score'] as double;
-      return '$avg';
+      String average = avg.toStringAsFixed(2);
+      return average;
     } else {
       return '--';
     }
   }
 
-    static Future<Review?> atualizaReview(
-    double score, String description, String date,int id,int game_id,int user_id) async {
+  static Future<Review?> atualizaReview(double score, String description,
+      String date, int id, int game_id, int user_id) async {
     //para o usuario atualizar o jogo
     var database = await _db;
     Map<String, dynamic> updatedData = {
@@ -230,15 +231,14 @@ class ReviewController {
       'date': date,
       'description': description
     };
-    int result =
-    await database!
+    int result = await database!
         .update('review', updatedData, where: "id = ?", whereArgs: [id]);
 
-    if(result>0){
-    Review? aux_review = await findReview(user_id,game_id);
-    
-    return (aux_review);
-    //para bea
+    if (result > 0) {
+      Review? aux_review = await findReview(user_id, game_id);
+
+      return (aux_review);
+      //para bea
     }
 //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
   }

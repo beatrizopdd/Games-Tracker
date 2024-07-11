@@ -383,7 +383,7 @@ class _GamePageState extends State<GamePage> {
                         ),
                       ),
                       Text(
-                        avg, //TODO pegar Media do Jogo
+                        avg,
                         style: const TextStyle(fontSize: 16),
                       ),
                       const Icon(Icons.star, size: 20, color: Colors.amber),

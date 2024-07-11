@@ -92,7 +92,6 @@ class _ReviewPageState extends State<ReviewPage> {
                   TextButton(
                     child: const Text("Editar"),
                     onPressed: () async {
-                      // TODO procedimento de atualizar review
                       review = (await ReviewController.atualizaReview((_newScoreController),_newDescriptionController.text,DateTime.now.toString(),review.id,review.game_id,review.user_id))!;
                       Navigator.pop(context);
                     },

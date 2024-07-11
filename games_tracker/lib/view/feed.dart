@@ -25,7 +25,6 @@ class _FeedState extends State<Feed> {
   int _filterController = 2;
   TextEditingController _filterDataController = TextEditingController();
 
-  // TODO Lista de jogos:
   // op = 0 pra lista do usuario
   // op = 1 pra lista geral
   // op = 2 pra lista selecionada por data
@@ -33,6 +32,7 @@ class _FeedState extends State<Feed> {
   // op = 4 pra lista selecionada por média
   Future<List<Map<String, dynamic>>> getGames() async {
     List<Game> gameList = [];
+    List<Map<String, dynamic>> gameListWithAverages = [];
     switch (op) {
       case 0:
         gameList = await GameController.objetifyTableGame(user.id);
@@ -49,17 +49,17 @@ class _FeedState extends State<Feed> {
             _filterDataController.text);
         break;
       case 4:
-        //TODO MEDIA
-        gameList = [];
+        gameList = await GameController.testeFiltroMedia(
+            user.id, _filterDataController.text);
         break;
       default:
         break;
     }
-    List<Map<String, dynamic>> gameListWithAverages = [];
     for (Game game in gameList) {
       String? avg = await ReviewController.mediaByGame(game.id);
       gameListWithAverages.add({'game': game, 'average': avg});
     }
+
     return gameListWithAverages;
   }
 
@@ -102,7 +102,7 @@ class _FeedState extends State<Feed> {
           ),
         ),
 
-        // TODO Filtro e Limpeza de Campos
+        
         actions: [
           IconButton(
             icon: const Icon(Icons.tune, color: Colors.white),
@@ -490,22 +490,24 @@ class _FeedState extends State<Feed> {
                             ],
                           ),
 
-                          // Entrar na página
-                          onTap: () {
-                            Navigator.of(context).pushNamed(
-                              "/game_page",
-                              arguments: [
-                                user,
-                                game,
-                                gameListWithAverages[index]['average']
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  );
-                }
+                            // Entrar na página
+                            onTap: () {
+                              Navigator.of(context).pushNamed(
+                                "/game_page",
+                                arguments: [
+                                  user,
+                                  game,
+                                  gameListWithAverages[index]['average']
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  }
+
+                
               }
             },
           ),
