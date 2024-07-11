@@ -30,14 +30,46 @@ class UserController {
     print("\n");
   }
 
+  static Future<User?> findUserByID(user_id) async {
+    String table = 'user';
+    List<String> columns = [
+      'id',
+      'name',
+      'email',
+      'password',
+    ];
+    String where = 'id = LIKE';
+    List<dynamic> whereArgs = [user_id];
+
+    // Executando a consulta
+    var database = await _db;
+    List<Map<String, dynamic>> result = await database!.query(
+      table,
+      columns: columns,
+      where: where,
+      whereArgs: whereArgs,
+    );
+
+    // Verificando se a lista não está vazia antes de criar o jogo
+
+    User? user;
+    if (result.isNotEmpty) {
+      user = User.fromMap(result.first);
+    }
+    
+    if (user == null) {
+      print('Nenhum game encontrado na lista.');
+    }
+    return user;
+  }
+
   static Future<int> insertUser(String nome, String email, String senha) async {
     var database = await _db;
 
     int result = await database!
         .insert('user', {'name': nome, 'email': email, 'password': senha});
 
-    
-    return result;//result é o id do cara inserido
+    return result; //result é o id do cara inserido
   }
 
   static Future<int> deleteUser(String nome) async {

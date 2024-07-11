@@ -32,8 +32,7 @@ class _GamePageState extends State<GamePage> {
 
   // Isso garante que o jogo esteja sempre atualizado
   Future<Game> updateGameData() async {
-    gameAuthor = "inserir find user by id";
-    game = (await GameController.findGameID(game.id))!;
+    game = (await GameController.findGameByID(game.id))!;
     avg = (await ReviewController.mediaByGame(game.id))!;
 
     return game;
