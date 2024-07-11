@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:games_tracker/controller/database_controller.dart';
-import 'package:games_tracker/controller/review_controller.dart';
 import 'register.dart';
 import 'login.dart';
 
@@ -107,65 +105,7 @@ class _HomeState extends State<Home> {
                       style: TextStyle(color: Colors.deepPurple),
                     ),
                   ),
-                  //Botão para Imprimir Banco de Dados
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                    ),
-                    onPressed: () async {
-                      await DatabaseController.db; 
-                      // Certifique-se de que o banco de dados está inicializado
-                      // Imprima o conteúdo de outras tabelas conforme necessário
-                      print('User:');
-                      await DatabaseController.printTable('user');
-                      print('Genre:');
-                      await DatabaseController.printTable('genre');
-                      print('Game:');
-                      await DatabaseController.printTable('game');
-                      print('Game_Genre:');
-                      await DatabaseController.printTable('game_genre');
-                      print('Review');
-                      await DatabaseController.printTable('review');
-                    },
-                    child: const Text(
-                      'Imprimir Banco de Dados',
-                      style: TextStyle(color: Colors.deepPurple),
-                    ),
-                  ),
-                  // Botões de testes no Banco de Dados
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                    ),
-                    onPressed: () async {
-                      await DatabaseController.db; 
-                      // Certifique-se de que o banco de dados está inicializado
-                      // Teste o conteúdo de outras tabelas conforme necessário
-                      //ReviewController.insertReview(
-                      //1, 20, 'Maguinifique!', 9.71, '2021');
-                      //UserController.deleteUser('Teste 1');
-                      //ReviewController.findReview(1, 1);
-                      //ReviewController.objetifyTableReviewbyGame(2);
-                      //ReviewController.objetifyTableReviewbyUser(1);
-                      ReviewController.mediaByGame(2);
-                    },
-                    child: const Text(
-                      'Testa Banco de Dados',
-                      style: TextStyle(color: Colors.deepPurple),
-                    ),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 30),
-                    ),
-                    onPressed: () async {
-                      await DatabaseController.deleteDatabaseFile();
-                    },
-                    child: const Text(
-                      'Apaga Banco de Dados',
-                      style: TextStyle(color: Colors.deepPurple),
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
