@@ -221,35 +221,8 @@ class ReviewController {
     }
   }
 
-  /*
+  
 
-  static getgames() async {
-    var database = db;
-    String sql = "SELECT * FROM $tableName";
-
-    List games = await database!.rawQuery(sql);
-
-    return games;
-  }
-
-  Future<int> updatreview(int user_id,int game_id,String description,double score,String date) async {//para o usuario atualizar a review
-    var database = db;
-
-    int result = await database!.update(tableName, review.toMap(),
-        where: "id = ?", whereArgs: [review.id!]);
-
-    return result;
-  }
-
-  Future<int> deletegame(int id) async {
-    var database = db;
-
-    int result =
-        await database!.delete(tableName, where: "id = ?", whereArgs: [id]);
-
-    return result;
-  }
-}*/
 
   static Future<List<Game>> filtronota(double score) async {
     //????
