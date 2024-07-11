@@ -173,7 +173,13 @@ static Future<String> updategenre(String name,int game_id) async {//para o usuar
         }
     }
     print(lista_generos.toString());
-    return (lista_generos.toString());//cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
+    if(lista_generos.toString().isNotEmpty){
+        return (lista_generos.toString());
+    }
+    else{
+      return '--';
+    }
+    //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
   } 
 
 

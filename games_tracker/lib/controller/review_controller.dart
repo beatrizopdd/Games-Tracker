@@ -32,8 +32,8 @@ class ReviewController {
     String table = 'review';
     List<String> columns = [
       'id',
-      'user_id',
       'game_id',
+      'user_id',
       'score',
       'description',
       'date'
@@ -51,23 +51,27 @@ class ReviewController {
     );
 
     // Verificando se a lista não está vazia antes de criar o review
-
+    print("tesssssste");
     Review? review;
-    if (result.isNotEmpty) {
-      review = Review.fromMap(result.first);
-    }
 
+    if (result.isNotEmpty) {
+      print("blabla");
+      review = Review.fromMap(result.first);
+      }
+    
+    print("taaaa");
     // Imprimindo o review para verificar o mapeamento
     for (var i in result) {
       print(i);
     }
-
+    print("bea");
     if (review != null) {
       print(
           'ID: ${review.id}, USER_ID: ${review.user_id}, GAME_ID: ${review.game_id}, SCORE: ${review.score}, DESCRIPTION: ${review.date}');
     } else {
       print('Nenhum review encontrado na lista.');
     }
+    print("tudo daqui é do find");
 
     return review;
   }
@@ -303,16 +307,19 @@ class ReviewController {
     //para o usuario atualizar o jogo
     var database = await _db;
     Map<String, dynamic> updatedData = {
-      'score': description,
+      'score': score,
       'date': date,
       'description': description
     };
-    //int result =
+    int result =
     await database!
         .update('review', updatedData, where: "id = ?", whereArgs: [id]);
 
+    if(result>0){
     Review? aux_review = await findReview(user_id,game_id);
-
-    return (aux_review); //cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
+    
+    return (aux_review);
+    }
+//cada campo no HUD vai mostrar cada campo de name,description e release_date na tela
   }
 }
