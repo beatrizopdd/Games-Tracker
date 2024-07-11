@@ -34,11 +34,7 @@ class _FeedState extends State<Feed> {
   // op = 3 pra lista selecionada por genero
   // op = 4 pra lista selecionada por média
 
-  //Para as médias
-
-  List<String?>? avgs = [];
-
-  Future<List<Game>> getGames() async {
+  Future<List<Map<String, dynamic>>> getGames() async {
     List<Game> gameList = [];
     switch (op) {
       case 0:
@@ -61,13 +57,12 @@ class _FeedState extends State<Feed> {
       default:
         break;
     }
-    for (var game in gameList) {
-      print('Teste for');
-      String media;
-      //media = ReviewController.mediaByGame(game.id) as String;
-      print('Teste mediaByGame');
+    List<Map<String, dynamic>> gameListWithAverages = [];
+    for (Game game in gameList) {
+      String? avg = await ReviewController.mediaByGame(game.id);
+      gameListWithAverages.add({'game': game, 'average': avg});
     }
-    return gameList;
+    return gameListWithAverages;
   }
 
   void _showMessage(String message) {
@@ -454,14 +449,18 @@ class _FeedState extends State<Feed> {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  List<Game>? gameList = snapshot.data;
-                  if (gameList!.isEmpty) {
+                  List<Map<String, dynamic>>? gameListWithAverages =
+                      snapshot.data;
+                  if (gameListWithAverages!.isEmpty) {
                     return const Center(child: Icon(Icons.videogame_asset_off));
                   } else {
                     return Expanded(
                       child: ListView.builder(
-                        itemCount: gameList.length,
+                        itemCount: gameListWithAverages.length,
                         itemBuilder: (context, index) {
+                          Game game = gameListWithAverages[index]['game'];
+                          String average =
+                              gameListWithAverages[index]['average'];
                           return ListTile(
                             contentPadding: const EdgeInsets.all(5),
                             leading:
@@ -472,14 +471,13 @@ class _FeedState extends State<Feed> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 // Nome
-                                Expanded(child: Text(gameList[index].name)),
+                                Expanded(child: Text(game.name)),
 
                                 // Média
-                                const Row(
+                                Row(
                                   children: [
                                     Text(
-                                      // TODO inserir média (tirar const da row)
-                                      "inserir média",
+                                      average,
                                       style: const TextStyle(fontSize: 15),
                                     ),
                                     const Icon(
@@ -496,7 +494,7 @@ class _FeedState extends State<Feed> {
                             onTap: () {
                               Navigator.of(context).pushNamed(
                                 "/game_page",
-                                arguments: [user, gameList[index]],
+                                arguments: [user, game, gameListWithAverages[index]['average']],
                               );
                             },
                           );
