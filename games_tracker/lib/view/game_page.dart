@@ -68,7 +68,7 @@ class _GamePageState extends State<GamePage> {
             onPressed: () async {
               if (game.user_id == user.id) {
                 String? game_gender_name =
-                    await GameController.findGenreListfromGame(game);
+                    await GameController.findGenreListfromGame(game.id);
                 _newNameController.text = game.name;
                 _newReleaseDateController.text = game.release_date;
                 _newDescriptionController.text = game.description;
