@@ -1,3 +1,5 @@
+import 'package:games_tracker/controller/review_controller.dart';
+
 import 'database_controller.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/genre.dart';
@@ -154,13 +156,25 @@ class GenreController {
     }
     
   }
+  static Future<int> deleteGenre(int game_id) async {
+    var database = await _db;
+
+    //Game? game;
+    int game_genre_result = await database!.delete('game_genre',
+        where: "game_id = ?", whereArgs: [game_id]);
+    return game_genre_result;
+  }
 
 
 static Future<String> updategenre(String name,int game_id) async {//para o usuario atualizar o jogo
-    var database = await _db;//Aventura,Ação,RPG
+    var database = await _db;//Aventura,Ação,RPG,Aventuraaaa
+    print("TESTANDO UPDATE GENRE");
+    print(name);
+    
+    Set<String> lista_generos = name.split(',').toSet();
 
-  Set<String> lista_generos = name.split(',').toSet();//Aventura,RPG
-  
+    await deleteGenre(game_id);
+    
     for (String s in lista_generos) {
       print("printando S $s");
       int res_gen =
