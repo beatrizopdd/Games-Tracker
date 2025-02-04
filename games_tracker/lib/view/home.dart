@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:games_tracker/controller/database_controller.dart';
+import 'package:games_tracker/controller/review_controller.dart';
 import 'register.dart';
 import 'login.dart';
 
@@ -105,6 +107,9 @@ class _HomeState extends State<Home> {
                       style: TextStyle(color: Colors.deepPurple),
                     ),
                   ),
+                  //Botão para Imprimir Banco de Dados
+                  
+                  
                   
                 ],
               ),

@@ -83,15 +83,15 @@ class DatabaseController {
 
       // Inserção de dados de exemplo
       await db.insert('user',
-          {'name': 'Teste 1', 'email': 'teste1@teste', 'password': '123456'});
+          {'name': 'Fulano', 'email': 'teste1@teste', 'password': '123456'});
       await db.insert('user',
-          {'name': 'Teste 2', 'email': 'teste2@teste', 'password': '123456'});
+          {'name': 'Beltrano', 'email': 'teste2@teste', 'password': '123456'});
       await db.insert('user',
-          {'name': 'Teste 3', 'email': 'teste3@teste', 'password': '123456'});
+          {'name': 'Ciclano', 'email': 'teste3@teste', 'password': '123456'});
       await db.insert('user',
-          {'name': 'Teste 4', 'email': 'teste4@teste', 'password': '123456'});
+          {'name': 'Romulano', 'email': 'teste4@teste', 'password': '123456'});
       await db.insert('user',
-          {'name': 'Teste 5', 'email': 'teste5@teste', 'password': '123456'});
+          {'name': 'Vulcano', 'email': 'teste5@teste', 'password': '123456'});
 
       await db.insert('genre', {'name': 'Aventura'});
       await db.insert('genre', {'name': 'Ação'});
@@ -143,28 +143,28 @@ class DatabaseController {
         'game_id': 1,
         'score': 9.5,
         'description': 'Teste',
-        'date': '2024-06-20'
+        'date': '2024-07-10 20:17:26.336657'
       });
       await db.insert('review', {
         'user_id': 2,
         'game_id': 1,
         'score': 9.0,
         'description': 'Teste',
-        'date': '2024-06-20'
+        'date': '2024-07-10 20:17:26.336657'
       });
       await db.insert('review', {
         'user_id': 3,
         'game_id': 1,
         'score': 8.5,
         'description': 'Teste',
-        'date': '2024-06-20'
+        'date': '2024-07-10 20:17:26.336657'
       });
       await db.insert('review', {
         'user_id': 4,
         'game_id': 1,
         'score': 9.6,
         'description': 'Teste',
-        'date': '2024-06-20'
+        'date': '2024-07-10 20:17:26.336657'
       });
     });
 
